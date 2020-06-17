@@ -21,7 +21,7 @@ public class DataUtils {
     public static Long convertDataToLong(String res) {
         long startDate = 0;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = sdf.parse(res);
 
             startDate = date.getTime();
@@ -37,7 +37,7 @@ public class DataUtils {
         String res = day + "/" + month + "/" + year;
         long startDate = 0;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = sdf.parse(res);
 
             startDate = date.getTime();
@@ -53,10 +53,10 @@ public class DataUtils {
         String day = str.substring(8, 10);
         String month = str.substring(5, 7);
         String year = str.substring(0, 4);
-        String res = day + "/" + month + "/" + year;
+        String res = year + "-" + month + "-" + day;
         long startDate = 0;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = sdf.parse(res);
 
             startDate = date.getTime();
@@ -69,20 +69,19 @@ public class DataUtils {
     }
 
     public static String convertLongToDataString(Long date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = formatter.format(new Date(date));
         return dateString;
     }
 
     public static String getCurrentDateInString() {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateobj = new Date();
-        String data = df.format(dateobj);
-        return data;
+        Date date = new Date();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        return mDate;
     }
 
     public static Long getCurentDateInLong() {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date dateobj = new Date();
         String data = df.format(dateobj);
         Long l = convertDataToLongWithRawString(data);
@@ -154,7 +153,7 @@ public class DataUtils {
             String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content";
 
             File file = new File(path + File.separator + name);
-           b = file.delete();
+            b = file.delete();
 
         } catch (Exception e) {
             e.printStackTrace();

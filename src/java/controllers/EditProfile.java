@@ -82,21 +82,46 @@ public class EditProfile extends HttpServlet {
         String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content"; //getServletContext().getRealPath("/Content");
 
         // Part filePart = request.getPart("file");
-        Part filePart = request.getPart("editfile");
-        String fileName = DataUtils.generateRandomString(15) + ".jpg";
+        if (request.getPart("editfile") != null) {
+            Part filePart = request.getPart("editfile");
+            String fileName = DataUtils.generateRandomString(15) + ".jpg";
 
-        try {
-            DataUtils.deletePersonImage(person.getPhoto());
-            DataUtils.savePhoto(filePart, path, fileName);
-            person.setPhoto(fileName);
+            try {
+                DataUtils.deletePersonImage(person.getPhoto());
+                DataUtils.savePhoto(filePart, path, fileName);
+                person.setPhoto(fileName);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            DbHelper db = new DbHelper();
+            db.updatePerson(person);
         }
 
-        DbHelper db = new DbHelper();
-        db.updatePerson(person);
-        
+        if (request.getParameterNames() != null) {
+
+            Person cur = Account.getCurrentPerson(request);
+            if (request.getParameter("editName") != null) {
+
+                String name = request.getParameter("editName");
+                cur.setName(name);
+
+            }
+            if (request.getParameter("editLastname") != null) {
+                String lastname = request.getParameter("editLastname");
+                cur.setLastname(lastname);
+            }
+
+            if (request.getParameter("editBirthday") != null) {
+                Long b = DataUtils.convertDataToLongWithRawString(request.getParameter("editBirthday"));
+                cur.setBirthday(b);
+            }
+            DbHelper db = new DbHelper();
+            db.updatePerson(cur);
+
+        }
+
         response.sendRedirect("EditProfile");
     }
 

@@ -60,7 +60,7 @@ public class TestUpload extends HttpServlet {
         String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content";
         Part filePart = request.getPart("file");
         String fileName = DataUtils.generateRandomString(15)+".jpg";
-        
+       
         OutputStream out = null;
         InputStream fileContent = null;
         final PrintWriter writer = response.getWriter();

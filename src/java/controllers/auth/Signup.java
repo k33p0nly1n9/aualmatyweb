@@ -61,6 +61,15 @@ public class Signup extends HttpServlet {
         String passwd = request.getParameter("passwd");
         String confirm = request.getParameter("confirm");
 
+        String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content";
+
+        String fileName = "";
+        Part filePart = null;
+        if (request.getPart("signupphoto") != null) {
+            filePart = request.getPart("signupphoto");
+            fileName = DataUtils.generateRandomString(15) + ".jpg";
+        }
+
         Long birthday = 0L;
         try {
             String b = request.getParameter("birthday");
@@ -93,7 +102,18 @@ public class Signup extends HttpServlet {
                     person.setBirthday(birthday);
                 }
 
-                db.addPerson(person);
+                try {
+
+                    if (filePart != null) {
+                        DataUtils.savePhoto(filePart, path, fileName);
+                        person.setPhoto(fileName);
+                    }
+
+                    db.addPerson(person);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 response.sendRedirect("Login");
             }
         }

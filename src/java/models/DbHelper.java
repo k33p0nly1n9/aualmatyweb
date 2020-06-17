@@ -190,30 +190,26 @@ public class DbHelper {
 
 // <editor-fold defaultstate="collapsed" desc="Person">
     public void addPerson(Person person) {
+        
+        String pphoto = person.getPhoto();
+        if(pphoto == null){
+        pphoto = "executors_default_image.png";
+        }
         String query = "INSERT INTO " + TABLE_PERSON + "(" + KEY_PERSON_NAME + ", " + KEY_PERSON_LASTNAME + ", " + KEY_PERSON_NUMBER
-                       + ", " + KEY_PERSON_PASSWD + ", " + KEY_PERSON_RATING + ", " + KEY_PERSON_CREATED_DATE + ", " + KEY_PERSON_PHOTO + ", " + KEY_PERSON_BIRTHDAY
-                       + ") VALUES (?,?,?,?,?,?,?,?)";
+                       + ", " + KEY_PERSON_PASSWD + ", " + KEY_PERSON_CREATED_DATE + ", " + KEY_PERSON_PHOTO + ", " + KEY_PERSON_BIRTHDAY
+                       + ") VALUES ('" + person.getName() + "','"
+                       + person.getLastname() + "','"
+                       + person.getNumber() + "','"
+                       + person.getPasswd() + "',"
+                       + person.getCreatedDate() + ",'"
+                       + pphoto + "',"
+                       + person.getBirthday() + ")";
         try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
 
-            con.setAutoCommit(false);
-            PreparedStatement pstmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            Statement stmt2 = con.createStatement();
+            stmt2.execute(query);
 
-            pstmt.setString(1, person.getName());
-            pstmt.setString(2, person.getLastname());
-            pstmt.setString(3, person.getNumber());
-            pstmt.setString(4, person.getPasswd());
-            pstmt.setDouble(5, person.getRating());
-            pstmt.setLong(6, person.getCreatedDate());
-            pstmt.setString(7, person.getPhoto());
-            pstmt.setLong(8, person.getBirthday());
-
-            pstmt.executeUpdate();
-
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.first()) {
-                person.setId(1);
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -270,9 +266,11 @@ public class DbHelper {
         int rating = rs.getInt(KEY_PERSON_RATING);
         long date = rs.getLong(KEY_PERSON_CREATED_DATE);
         String photo = rs.getString(KEY_PERSON_PHOTO);
+        Long birthday = rs.getLong(KEY_PERSON_BIRTHDAY);
 
         Person p = new Person(id, name, last, passwd, number, rating, date);
         p.setPhoto(photo);
+        p.setBirthday(birthday);
         return p;
     }
 
@@ -389,7 +387,8 @@ public class DbHelper {
                        + KEY_PERSON_PASSWD + "=?,"
                        + KEY_PERSON_RATING + "=?,"
                        + KEY_PERSON_NUMBER + "=?,"
-                       + KEY_PERSON_PHOTO + "=?"
+                       + KEY_PERSON_BIRTHDAY + "=?,"
+                        + KEY_PERSON_PHOTO + "=?"
                        + " WHERE " + KEY_PERSON_ID + "=" + person.getId();
         try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
@@ -401,7 +400,8 @@ public class DbHelper {
             pstmt.setString(3, person.getPasswd());
             pstmt.setInt(4, person.getRating());
             pstmt.setString(5, person.getNumber());
-            pstmt.setString(6, person.getPhoto());
+            pstmt.setLong(6, person.getBirthday());
+             pstmt.setString(7, person.getPhoto());
 
             pstmt.executeUpdate();
 
@@ -479,8 +479,8 @@ public class DbHelper {
             java.io.File file = new java.io.File(path + java.io.File.separator + photo);
             b = file.delete();
 
-            String query2 = "update " + TABLE_PERSON + " set " + KEY_PERSON_PHOTO +  
-                            " = 'executors_default_image.png' " + " where " + KEY_PERSON_ID + "=" + personId;
+            String query2 = "update " + TABLE_PERSON + " set " + KEY_PERSON_PHOTO
+                            + " = 'executors_default_image.png' " + " where " + KEY_PERSON_ID + "=" + personId;
             stmt.execute(query2);
 
             return b;
