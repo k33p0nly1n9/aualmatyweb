@@ -35,7 +35,7 @@ public class TestAllExecutors extends HttpServlet {
        PrintWriter out = response.getWriter();
 
         DbHelper db = new DbHelper();
-        ArrayList<Executor> executors = db.getExecutors();
+        ArrayList<Executor> executors = db.getAllExecutors();
         
         for (Executor r : executors) {
             db.loadExecutorServices(r);

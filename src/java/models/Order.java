@@ -11,12 +11,14 @@ package models;
  */
 public class Order {
      private int id;
+    private int customerId;
     private String title;
     private int sectionId;
     private double price;
     private Long created_date;
     private Long deadline;
     private String description;
+        private boolean isAnonNote;
 
 public Order(){}
 
@@ -54,14 +56,6 @@ public Order(){}
         this.title = title;
     }
 
-    public int getSection() {
-        return sectionId;
-    }
-
-    public void setSection(int section) {
-        this.sectionId = section;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -92,6 +86,30 @@ public Order(){}
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getSectionId() {
+        return sectionId;
+    }
+
+    public void setSectionId(int sectionId) {
+        this.sectionId = sectionId;
+    }
+
+    public boolean isIsAnonNote() {
+        return isAnonNote;
+    }
+
+    public void setIsAnonNote(boolean isAnonNote) {
+        this.isAnonNote = isAnonNote;
     }
 
     

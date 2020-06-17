@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
+import javax.servlet.http.*;
 
 /**
  *
@@ -16,48 +17,49 @@ import java.util.logging.*;
  */
 public class DbHelper {
 
-   /* private static final String URL = "jdbc:mysql://localhost:3306/mydb?useSSL=false";
+    private static final String URL = "jdbc:mysql://localhost:3306/mydb?useSSL=false";
     private static final String DBUSER = "root";
-    private static final String DBPASSWORD = "1q2w3e4r";*/
-    
-        private static final String URL = "jdbc:mysql://dz8959rne9lumkkw.chr7pe7iynqr.eu-west-1.rds.amazonaws.com/etujrbvqopdq3qke?sslmode=require";
-    private static final String DBUSER = "qyjw14jf9r663zjx";
-    private static final String DBPASSWORD = "fgzp7rabhni4a09o";
+    private static final String DBPASSWORD = "1q2w3e4r";
 
-    public static final String TABLE_PERSON = "person";
+    public static final String TABLE_PERSON = "persons";
     public static final String TABLE_ORDERS = "orders";
-    public static final String TABLE_ORDERNPERSON = "order_person";
+    public static final String TABLE_ORDERNPERSON = "ordernperson";
     public static final String TABLE_EXECUTOR = "executor";
-    public static final String TABLE_EXECUTORS = "executors";
+    // public static final String TABLE_EXECUTORS = "executors";
     public static final String TABLE_SERVICE = "service";
-    //public static final String TABLE_SERVICES = "services";
-    public static final String TABLE_SECTION = "section";
-    // public static final String TABLE_SECTIONS = "sections";
+    //  public static final String TABLE_SERVICES = "services";
+    // public static final String TABLE_SECTION = "section";
+    public static final String TABLE_SECTIONS = "sections";
     public static final String TABLE_BOOKMARKS = "bookmarks";
     public static final String TABLE_REVIEWS = "reviews";
-    public static final String TABLE_EXECUTORNSERVICES = "executor_services";
-    public static final String TABLE_NOTIFY = "ntfctns";
+    public static final String TABLE_EXECUTORNSERVICES = "executornservices";
+    public static final String TABLE_NOTIFY = "notify";
     public static final String TABLE_EXECUTORNPERSON = "executor_person";
-    public static final String TABLE_RESPONSE = "responses";
+    public static final String TABLE_RESPONSES = "responses";
+    public static final String TABLE_ANSWERS = "answers";
+    public static final String TABLE_REVIEWNANSWERS = "reviewnanswers";
 
-    public static final String KEY_PERSON_ID = "_idPerson";
-    public static final String KEY_ORDER_ID = "_idOrder";
-    public static final String KEY_EXECUTOR_ID = "idExecutor";
-    public static final String KEY_SERVICE_ID = "_idService";
-    public static final String KEY_SECTION_ID = "_idSection";
-    public static final String KEY_EXECUTORNSERVICES_ID = "_idExecnserv";
-    public static final String KEY_NOTIFY_ID = "_idNtf";
-    public static final String KEY_ORDERNPERSON_PART_ID = "_idOrdnper";
-    public static final String KEY_EXECUTORNPERSON_ID = "_idExenper";
-    public static final String KEY_RESPONSE_ID = "_idResponses";
+    public static final String KEY_PERSON_ID = "person_id";
+    public static final String KEY_ORDER_ID = "order_id";
+    public static final String KEY_EXECUTOR_ID = "executor_id";
+    public static final String KEY_SERVICE_ID = "service_id";
+    public static final String KEY_SECTION_ID = "section_id";
+    public static final String KEY_EXECUTORNSERVICES_ID = "executnservice_id";
+    public static final String KEY_NOTIFY_ID = "notify_id";
+    public static final String KEY_ORDERNPERSON_PART_ID = "ordernperson_id";
+    public static final String KEY_EXECUTORNPERSON_ID = "executnperson_id";
+    public static final String KEY_RESPONSES_ID = "responses_id";
+    public static final String KEY_REVIEWNANSWERS_ID = "reviewnanswers_id";
 
     public static final String KEY_PERSON_NAME = "person_name";
     public static final String KEY_PERSON_LASTNAME = "person_lastname";
-    public static final String KEY_PERSON_PASSWD = "person_passwd";
+    public static final String KEY_PERSON_PASSWD = "person_passw";
     public static final String KEY_PERSON_CREATED_DATE = "person_created_date";
     public static final String KEY_PERSON_NUMBER = "person_number";
-    public static final String KEY_PERSON_PHOTO = "photo";
+    public static final String KEY_PERSON_PHOTO = "person_photo";
     public static final String KEY_PERSON_RATING = "person_rating";
+    public static final String KEY_PERSON_BIRTHDAY = "person_birthday";
+    public static final String KEY_PERSON_ISEXECUTOR = "isExecutor";
 
     public static final String KEY_ORDER_TITLE = "order_title";
     public static final String KEY_ORDER_SECTION_ID = "order_section_id";
@@ -65,13 +67,14 @@ public class DbHelper {
     public static final String KEY_ORDER_CREATED_DATE = "order_created_date";
     public static final String KEY_ORDER_DEADLINE = "order_deadline";
     public static final String KEY_ORDER_DESCRIPTION = "order_description";
-//    public static final String KEY_ORDER_EXECUTOR_ID = "executor_id";
-//    public static final String KEY_ORDER_CUSTOMER_ID = "customer_id";
+    public static final String KEY_ORDER_ISANONNOTE = "order_isanonymnote";
+    public static final String KEY_ORDER_CUSTOMER_ID = "customer_id";
 
     public static final String KEY_EXECUTOR_PERSON_ID = "executor_personId";
     public static final String KEY_EXECUTOR_SECTION_ID = "executor_sectionId";
     public static final String KEY_EXECUTOR_SPECIALIZATION = "executor_specialization";
     public static final String KEY_EXECUTOR_DESCRIPTION = "executor_description";
+    public static final String KEY_EXECUTOR_COVERPHOTO = "executor_coverphoto";
 
     // public static final String KEY_SERVICE_PERSON_ID = "person_id";
     public static final String KEY_SERVICE_TITLE = "service_title";
@@ -79,58 +82,61 @@ public class DbHelper {
 
     public static final String KEY_SECTION_TITLE = "section_title";
 
-    public static final String KEY_BOOKMARK_PART_ID = "_idBkm";
-    public static final String KEY_BOOKMARK_ORDER_ID = "bkm_order_id";
-    public static final String KEY_BOOKMARK_PERSON_ID = "bkm_person_id";
-    public static final String KEY_BOOKMARK_EXECUTOR_ID = "bkm_executor_id";
+    public static final String KEY_BOOKMARK_PART_ID = "bookm_id";
+    public static final String KEY_BOOKMARK_PERSON_ID = "bookm_person_id";
+    public static final String KEY_BOOKMARK_EXECUTOR_ID = "bookm_executor_id";
+    public static final String KEY_BOOKMARK_ORDER_ID = "bookm_order_id";
 
-    public static final String KEY_ORDERNPERSON_CUSTOMER_ID = "ordnper_customer_id";
-    public static final String KEY_ORDERNPERSON_ORDER_ID = "ordnper_order_id";
-    public static final String KEY_ORDERNPERSON_EXECUTOR_ID = "ordnper_executor_id";
-    public static final String KEY_ORDERNPERSON_STATUS = "ordnper_status";
+    public static final String KEY_ORDERNPERSON_CUSTOMER_ID = "ordernpers_customer_id";
+    public static final String KEY_ORDERNPERSON_ORDER_ID = "ordernpers_order_id";
+    public static final String KEY_ORDERNPERSON_EXECUTOR_ID = "ordernpers_executor_id";
+    public static final String KEY_ORDERNPERSON_STATUS = "ordernpers_status";
 
-    public static final String KEY_REVIEW_PART_ID = "_idReview";
-    public static final String KEY_REVIEW_EXECUTOR_ID = "rev_executor_id";
-    public static final String KEY_REVIEW_CUSTOMER_ID = "rev_customer_id";
-    public static final String KEY_REVIEW_ORDER_ID = "rev_order_id";
+    public static final String KEY_REVIEW_PART_ID = "review_id";
+    public static final String KEY_REVIEW_EXECUTOR_ID = "review_executor_id";
+    public static final String KEY_REVIEW_CUSTOMER_ID = "review_customer_id";
     public static final String KEY_REVIEW_REVIEW_TEXT = "review_text";
-    public static final String KEY_REVIEW_ASSESSMENT = "assessment";
+    public static final String KEY_REVIEW_ASSESSMENT = "review_assessment";
+    public static final String KEY_REVIEW_CREATED_DATE = "review_created_date";
 
-    public static final String KEY_LIST_OF_EXECUTORS_PART_ID = "_id";
-    public static final String KEY_LIST_OF_EXECUTOR_ID = "excutor_id";
-    public static final String KEY_LIST_OF_EXECUTORS_SPECIALIZATION = "specialization";
+    public static final String KEY_ANSWER_PART_ID = "answer_id";
+    public static final String KEY_ANSWER_REVIEW_ID = "answer_reviewid";
+    public static final String KEY_ANSWER_WHOANSWERS_ID = "answer_whoanswers";
+    public static final String KEY_ANSWER_WHOPOSTED_ID = "answer_whoposted";
+    public static final String KEY_ANSWER_TEXT = "answer_text";
+    public static final String KEY_ANSWER_CREATED_DATE = "answer_created_date";
 
-    public static final String KEY_EXECUTORNSERVICES_EXECUTOR_ID = "execnser_executor_id";
-    public static final String KEY_EXECUTONSERVICES_SERVICE_ID = "execnserv_service_id";
+    public static final String KEY_EXECUTORNSERVICES_EXECUTOR_ID = "executorId";
+    public static final String KEY_EXECUTORNSERVICES_SERVICE_ID = "serviceId";
 
-    public static final String KEY_NOTIFY_PERSON_ID = "ntf_personId";
-    public static final String KEY_NOTIFY_TEXT = "ntf_text";
-    public static final String KEY_NOTIFY_CREATED_DATE = "ntf_created_date";
+    public static final String KEY_REVIEWNANSWERS_REVIEW_ID = "reviewnanswers_reviewid";
+    public static final String KEY_REVIEWNANSWERS_ANSWER_ID = "reviewnanswers_answerid";
 
-    public static final String KEY_EXECUTORNPERSON_EXECUTOR_ID = "execnper_executorId";
-    public static final String KEY_EXECUTORNPERSON_PERSON_ID = "execnper_personId";
+    public static final String KEY_NOTIFY_TEXT = "notify_text";
+    public static final String KEY_NOTIFY_PERSONID = "notify_personid";
+    public static final String KEY_NOTIFY_CREATED_DATE = "notify_createddt";
+    public static final String KEY_NOTIFY_SECTION_ID = "notify_sectionId";
+    public static final String KEY_NOTIFY_SRC_ID = "notify_src";
+    public static final String KEY_NOTIFY_STATUS_ID = "notify_status";
 
-    public static final String KEY_RESPONSE_ORDER_ID = "resp_orderId";
-    public static final String KEY_RESPONSE_PERSON_ID = "resp_personId";
-    public static final String KEY_RESPONSE_PRICE = "resp_price";
-    public static final String KEY_RESPONSE_TEXT = "resp_text";
+    public static final String KEY_EXECUTORNPERSON_EXECUTOR_ID = "executorId";
+    public static final String KEY_EXECUTORNPERSON_PERSON_ID = "personId";
 
-    private Connection con;
-    private Statement stmt;
-    private ResultSet rs;
+    public static final String KEY_RESPONSES_PERSON_ID = "response_personid";
+    public static final String KEY_RESPONSES_ORDER_ID = "response_orderid";
+    public static final String KEY_RESPONSES_TEXT = "response_text";
+    public static final String KEY_RESPONSES_SUGGESTEDPRICE = "response_suggestesprice";
+    public static final String KEY_RESPONSES_CREATEDDATE = "response_date";
 
-    //TODO: WRITE ALL CRUD METHODS FOR DATABASE
+    // <editor-fold defaultstate="collapsed" desc="quiziz">
     public ArrayList<Question> getAllQuestions() {
         String query = "select * from questions";
-
         ArrayList<Question> result = new ArrayList<>();
-        try {
+
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
-
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 int id = rs.getInt("idQuestn");
@@ -144,9 +150,6 @@ public class DbHelper {
                 t.setId(id);
                 result.add(t);
             }
-            con.close();
-            stmt.close();
-            rs.close();
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -158,9 +161,8 @@ public class DbHelper {
                        + "(title, opt1,opt2,opt3,opt4,correct)"
                        + " VALUES(?,?,?,?,?,?)";
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
             con.setAutoCommit(false);
             PreparedStatement pstmt
                               = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -174,59 +176,46 @@ public class DbHelper {
 
             pstmt.executeUpdate();
 
-            rs = pstmt.getGeneratedKeys();
-            int candidateId = 0;
+            ResultSet rs = pstmt.getGeneratedKeys();
+            int qId = 0;
             if (rs.next()) {
-                candidateId = rs.getInt(1);
-                question.setId(candidateId);
+                qId = rs.getInt(1);
+                question.setId(qId);
             }
-            con.commit();
-            con.close();
-            stmt.close();
-            rs.close();
         } catch (Exception ex) {
-            try {
-                con.rollback();
-            } catch (Exception ex2) {
-            }
+            ex.printStackTrace();
         }
     }
+    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Person">
+// <editor-fold defaultstate="collapsed" desc="Person">
     public void addPerson(Person person) {
-        String query = "INSERT INTO " + TABLE_PERSON + "(" + KEY_PERSON_NAME + ", " + KEY_PERSON_LASTNAME
-                       + ", " + KEY_PERSON_PASSWD + ", " + KEY_PERSON_NUMBER + ", " + KEY_PERSON_RATING + ", " + KEY_PERSON_CREATED_DATE + "," + KEY_PERSON_PHOTO
-                       + ") VALUES (?, ?, ?, ?, ?, ?, ? )";
-        try {
+        String query = "INSERT INTO " + TABLE_PERSON + "(" + KEY_PERSON_NAME + ", " + KEY_PERSON_LASTNAME + ", " + KEY_PERSON_NUMBER
+                       + ", " + KEY_PERSON_PASSWD + ", " + KEY_PERSON_RATING + ", " + KEY_PERSON_CREATED_DATE + ", " + KEY_PERSON_PHOTO + ", " + KEY_PERSON_BIRTHDAY
+                       + ") VALUES (?,?,?,?,?,?,?,?)";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
+
             con.setAutoCommit(false);
             PreparedStatement pstmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             pstmt.setString(1, person.getName());
             pstmt.setString(2, person.getLastname());
-            pstmt.setString(3, person.getPasswd());
-            pstmt.setString(4, person.getNumber());
-            pstmt.setInt(5, person.getRating());
+            pstmt.setString(3, person.getNumber());
+            pstmt.setString(4, person.getPasswd());
+            pstmt.setDouble(5, person.getRating());
             pstmt.setLong(6, person.getCreatedDate());
             pstmt.setString(7, person.getPhoto());
+            pstmt.setLong(8, person.getBirthday());
 
             pstmt.executeUpdate();
 
-            rs = pstmt.getGeneratedKeys();
+            ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.first()) {
                 person.setId(1);
             }
-
-            con.commit();
-            pstmt.close();
-            rs.close();
         } catch (Exception ex) {
-
-            try {
-                con.rollback();
-            } catch (Exception exception2) {
-            }
+            ex.printStackTrace();
         }
     }
 
@@ -235,79 +224,20 @@ public class DbHelper {
         String query = "select * from " + TABLE_PERSON
                        + " where " + KEY_PERSON_ID + "=" + personId;
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt2 = con.createStatement();
+            ResultSet res = stmt2.executeQuery(query);
 
-            if (rs.next()) {
-                Person p = this.getPersonRs(rs);
+            if (res.next()) {
+                Person p = this.getPersonRs(res);
                 return p;
             }
-            con.close();
-            stmt.close();
-            rs.close();
 
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
-
         return null;
-    }
-
-    public void updatePerson(Person person) {
-        String query = "UPDATE " + TABLE_PERSON + " SET "
-                       + KEY_PERSON_NAME + "=?,"
-                       + KEY_PERSON_LASTNAME + "=?,"
-                       + KEY_PERSON_PASSWD + "=?,"
-                       + KEY_PERSON_RATING + "=?,"
-                       + KEY_PERSON_NUMBER + "=?,"
-                       + KEY_PERSON_CREATED_DATE + "=?,"
-                       + KEY_PERSON_PHOTO + "=?"
-                       + " WHERE " + KEY_PERSON_ID + "=" + person.getId();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            con.setAutoCommit(false);
-            PreparedStatement pstmt = con.prepareStatement(query, Statement.NO_GENERATED_KEYS);
-
-            pstmt.setString(1, person.getName());
-            pstmt.setString(2, person.getLastname());
-            pstmt.setString(3, person.getPasswd());
-            pstmt.setInt(4, person.getRating());
-            pstmt.setString(5, person.getNumber());
-            pstmt.setLong(6, person.getCreatedDate());
-            pstmt.setString(7, person.getPhoto());
-
-            pstmt.executeUpdate();
-
-            con.commit();
-            pstmt.close();
-
-            con.close();
-        } catch (Exception ex) {
-
-            try {
-                con.rollback();
-            } catch (Exception exception2) {
-            }
-        }
-    }
-
-    public void deletePerson(int personId) {
-        String query = "DELETE * FROM " + TABLE_PERSON + " WHERE "
-                       + KEY_PERSON_ID + "=" + personId;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
-            stmt.execute(query);
-            con.close();
-            stmt.close();
-        } catch (Exception ex) {
-        }
     }
 
     public ArrayList<Person> getPersons() {
@@ -316,20 +246,15 @@ public class DbHelper {
                        + " desc";
 
         ArrayList<Person> result = new ArrayList<>();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 Person person = this.getPersonRs(rs);
                 result.add(person);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -357,22 +282,18 @@ public class DbHelper {
      */
     public Person getPersonByNumb(String number) {
         String query = "select * from "
-                       + TABLE_PERSON + " where" + KEY_PERSON_NUMBER + "='"
+                       + TABLE_PERSON + " where " + KEY_PERSON_NUMBER + "='"
                        + number + "'";
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
                 Person p = getPersonRs(rs);
                 return p;
             }
-            con.close();
-            stmt.close();
-            rs.close();
 
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
@@ -383,23 +304,19 @@ public class DbHelper {
     /**
      * Возвращает пользователя по номеру и паролю для авторизации
      */
-    public Person getPersonNP(String numb, String passwd) {
-        String query = "select * from person  where person_number ='" + numb + " ' AND person_passwd= '" + passwd + "'";
+    public Person getPersonByPasswdNNumb(String numb, String passwd) {
+        String query = "select * from " + TABLE_PERSON + " where " + KEY_PERSON_NUMBER + "='"
+                       + numb + "' AND " + KEY_PERSON_PASSWD + "= '" + passwd + "'";
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
                 Person p = getPersonRs(rs);
                 return p;
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -411,37 +328,178 @@ public class DbHelper {
                        + " desc";
 
         ArrayList<Integer> arrID = new ArrayList<>();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 arrID.add(rs.getInt(KEY_PERSON_ID));
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
         return arrID;
     }
 
-  
-    // </editor-fold>
+    public boolean getPersonIsExecutorField(int personId) {
+        Boolean b = false;
+        String query = "SELECT " + KEY_PERSON_ISEXECUTOR + " FROM " + TABLE_PERSON
+                       + " WHERE " + KEY_PERSON_ID + "=" + personId;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
-    // <editor-fold defaultstate="collapsed" desc="Executor">
+            if (rs.first()) {
+                int v = rs.getInt(KEY_PERSON_ID);
+                if (v == 1) {
+                    b = true;
+                }
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return b;
+    }
+
+    public int getPersonRatingById(int id) {
+        String query = "select (select sum(" + KEY_REVIEW_ASSESSMENT + ") from " + TABLE_REVIEWS + " where " + KEY_REVIEW_EXECUTOR_ID
+                       + " = " + id + ")/(select count(" + KEY_REVIEW_CUSTOMER_ID + ") from " + TABLE_REVIEWS + " where " + KEY_REVIEW_EXECUTOR_ID
+                       + " = " + id + ")";
+        int rating = -1;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.first()) {
+                rating = rs.getInt(1);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return rating;
+    }
+
+    public void updatePerson(Person person) {
+        String query = "UPDATE " + TABLE_PERSON + " SET "
+                       + KEY_PERSON_NAME + "=?,"
+                       + KEY_PERSON_LASTNAME + "=?,"
+                       + KEY_PERSON_PASSWD + "=?,"
+                       + KEY_PERSON_RATING + "=?,"
+                       + KEY_PERSON_NUMBER + "=?,"
+                       + KEY_PERSON_PHOTO + "=?"
+                       + " WHERE " + KEY_PERSON_ID + "=" + person.getId();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            con.setAutoCommit(false);
+            PreparedStatement pstmt = con.prepareStatement(query, Statement.NO_GENERATED_KEYS);
+
+            pstmt.setString(1, person.getName());
+            pstmt.setString(2, person.getLastname());
+            pstmt.setString(3, person.getPasswd());
+            pstmt.setInt(4, person.getRating());
+            pstmt.setString(5, person.getNumber());
+            pstmt.setString(6, person.getPhoto());
+
+            pstmt.executeUpdate();
+
+            con.commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updatePersonRatingById(int personId) {
+        int rating = getPersonRatingById(personId);
+
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            String query = "UPDATE " + TABLE_PERSON + " SET "
+                           + KEY_PERSON_RATING + "= " + rating
+                           + " WHERE " + KEY_PERSON_ID + "= " + personId;
+
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setPersonIsExecutorField(int personId, Boolean b) {
+        int value;
+        if (b == true) {
+            value = 1;
+        }
+        else {
+            value = 0;
+        }
+        String query = "UPDATE " + TABLE_PERSON + " SET "
+                       + KEY_PERSON_ISEXECUTOR + "= " + value
+                       + " WHERE " + KEY_PERSON_ID + "= " + personId;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deletePerson(int personId) {
+        String query = "DELETE * FROM " + TABLE_PERSON + " WHERE "
+                       + KEY_PERSON_ID + "=" + personId;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public boolean deletePersonPhoto(int personId) {
+        boolean b = false;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            String query = "select " + KEY_PERSON_PHOTO + " from " + TABLE_PERSON + " where " + KEY_PERSON_ID + "=" + personId;
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            String photo = null;
+            if (rs.first()) {
+                photo = rs.getString(1);
+            }
+            String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content";
+
+            java.io.File file = new java.io.File(path + java.io.File.separator + photo);
+            b = file.delete();
+
+            String query2 = "update " + TABLE_PERSON + " set " + KEY_PERSON_PHOTO +  
+                            " = 'executors_default_image.png' " + " where " + KEY_PERSON_ID + "=" + personId;
+            stmt.execute(query2);
+
+            return b;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Executor">
     public void addExecutor(Executor executor) {
         String query = "INSERT INTO " + TABLE_EXECUTOR + "(" + KEY_EXECUTOR_PERSON_ID
                        + ", " + KEY_EXECUTOR_SECTION_ID + ", " + KEY_EXECUTOR_SPECIALIZATION
                        + ", " + KEY_EXECUTOR_DESCRIPTION + ") VALUES (?,?,?,?)";
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
+
             con.setAutoCommit(false);
             PreparedStatement pstmt
                               = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -453,21 +511,20 @@ public class DbHelper {
 
             pstmt.executeUpdate();
 
-            rs = pstmt.getGeneratedKeys();
+            ResultSet rs = pstmt.getGeneratedKeys();
             int id = 0;
             if (rs.next()) {
                 id = rs.getInt(1);
                 executor.setId(id);
             }
             con.commit();
-            con.close();
-            stmt.close();
-            rs.close();
+
+            onExecutorCreate(executor);
+            createExecutorServices(executor);
+            onExecutorServicesCreate(executor);
+            setPersonIsExecutorField(executor.getPersonId(), true);
         } catch (Exception ex) {
-            try {
-                con.rollback();
-            } catch (Exception ex2) {
-            }
+            ex.printStackTrace();
         }
     }
 
@@ -487,95 +544,145 @@ public class DbHelper {
         String query = "select * from " + TABLE_EXECUTOR + " where "
                        + KEY_EXECUTOR_ID + "=" + executorId;
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
                 Executor executor = this.getExecutorFromRS(rs);
                 return executor;
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
         return null;
     }
 
-    public ArrayList<Executor> getExecutors() {
+    public ArrayList<Executor> getAllExecutors() {
         String query = "select * from "
                        + TABLE_EXECUTOR + " order by " + KEY_EXECUTOR_ID
                        + " desc";
 
         ArrayList<Executor> result = new ArrayList<>();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER,
+                                                          DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 Executor executor = this.getExecutorFromRS(rs);
                 result.add(executor);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
         return result;
     }
-    
-    
-    public int getExecutorsCount() {
-        String query = "select count(*) from " + TABLE_EXECUTOR;
-        try {
-            Connection con = getCurrConnection();
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
 
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                con.close();
-                stmt.close();
-                rs.close();
-                return count;
+    public ArrayList<Executor> getExecutorsBySectionId(int cId) {
+        String query = "select * from "
+                       + TABLE_EXECUTOR + " where " + KEY_EXECUTOR_SECTION_ID + " = " + cId + " order by " + KEY_EXECUTOR_ID
+                       + " desc";
+
+        ArrayList<Executor> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER,
+                                                          DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Executor executor = this.getExecutorFromRS(rs);
+                result.add(executor);
             }
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
-        return -1;
+        return result;
     }
-    
-      public ArrayList<Executor> getExecutorsRecords(int start, int total) {
-        ArrayList<Executor> list = new ArrayList<>();
-        try {
-            Connection connection = getCurrConnection();
-            int i = total * (start - 1);
-            PreparedStatement ps = connection.prepareStatement("SELECT * from " + TABLE_EXECUTOR + " limit "
-                                                               + i + "," + total);
 
-            rs = ps.executeQuery();
+    public int getExecutorsCount() {
+        String query = "select count(*) from " + TABLE_EXECUTOR;
+        int count = 0;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return count;
+    }
+
+    public ArrayList<Executor> getExecutorsRecords(int start, int total) {
+        ArrayList<Executor> list = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            int i = total * (start - 1);
+            PreparedStatement ps = con.prepareStatement("SELECT * from " + TABLE_EXECUTOR + " limit "
+                                                        + i + "," + total);
+
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Executor executor = getExecutorFromRS(rs);
                 list.add(executor);
             }
-            connection.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
         return list;
+    }
+
+    public ArrayList<Service> getExecutorServices(int executorId) {
+        String query = "SELECT " + TABLE_SERVICE + "." + KEY_SERVICE_ID + ", "
+                       + TABLE_SERVICE + "." + KEY_SERVICE_TITLE + ", "
+                       + TABLE_SERVICE + "." + KEY_SERVICE_PRICE + " FROM " + TABLE_SERVICE
+                       + " JOIN " + TABLE_EXECUTORNSERVICES + " ON " + TABLE_SERVICE + "."
+                       + KEY_SERVICE_ID + "=" + TABLE_EXECUTORNSERVICES + "."
+                       + KEY_EXECUTORNSERVICES_SERVICE_ID + " WHERE " + TABLE_EXECUTORNSERVICES
+                       + "." + KEY_EXECUTORNSERVICES_EXECUTOR_ID + "=" + executorId;
+
+        ArrayList<Service> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER,
+                                                          DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Service service = this.getServiceFromRS(rs);
+                result.add(service);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return result;
+    }
+
+    public ArrayList<Integer> getExecutorsServicesId(int executorId) {
+        String query = "select " + KEY_EXECUTORNSERVICES_SERVICE_ID + " FROM "
+                       + TABLE_EXECUTORNSERVICES + " where " + KEY_EXECUTORNSERVICES_EXECUTOR_ID + " = " + executorId;
+        ArrayList<Integer> arrID = new ArrayList();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER,
+                                                          DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                arrID.add(rs.getInt(1));
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return arrID;
     }
 
     public void updateExecutor(Executor executor) {
@@ -585,74 +692,69 @@ public class DbHelper {
                        + KEY_EXECUTOR_PERSON_ID + "= " + executor.getPersonId() + ", "
                        + KEY_EXECUTOR_SECTION_ID + "= " + executor.getSectionId()
                        + " WHERE " + KEY_EXECUTOR_ID + "=" + executor.getId();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
 
-            // query = "SELECT MAX(id) FROM users";
-            con.close();
-            stmt.close();
+            updateExecutorServices(executor);
+            updateExecutorServices(executor);
+
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void deleteExecutor(int executorId) {
         String query = "DELETE * FROM " + TABLE_EXECUTOR + " WHERE "
                        + KEY_EXECUTOR_ID + "=" + executorId;
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
 
-            stmt = con.createStatement();
+            int personId = getPersonIdByExecutorId(executorId);
+            setPersonIsExecutorField(personId, false);
+            onExecutorDelete(executorId);
+
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
     //</editor-fold>
 
     // <editor-fold desc="Order" defaultstate="collapsed">
     public void addOrder(Order order) {
-        String query = "INSERT INTO " + TABLE_ORDERS + "(" + KEY_ORDER_TITLE
+        String query = "INSERT INTO " + TABLE_ORDERS + "(" + KEY_ORDER_CUSTOMER_ID + ", " + KEY_ORDER_TITLE
                        + ", " + KEY_ORDER_SECTION_ID + ", " + KEY_ORDER_PRICE + ", "
-                       + KEY_ORDER_DESCRIPTION + ", " + KEY_ORDER_DEADLINE + ", " + KEY_ORDER_CREATED_DATE
-                       + ") VALUES (?,?,?,?,?,?)";
+                       + KEY_ORDER_DESCRIPTION + ", " + KEY_ORDER_DEADLINE + ", "
+                       + KEY_ORDER_CREATED_DATE + ", " + KEY_ORDER_ISANONNOTE + ") VALUES (?,?,?,?,?,?)";
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
             con.setAutoCommit(false);
             PreparedStatement pstmt
                               = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-            pstmt.setString(1, order.getTitle());
-            pstmt.setInt(2, order.getSection());
-            pstmt.setDouble(3, order.getPrice());
-            pstmt.setString(4, order.getDescription());
-            pstmt.setLong(5, order.getDeadline());
-            pstmt.setLong(6, DataUtils.getCurentDateInLong());
+            pstmt.setInt(1, order.getCustomerId());
+            pstmt.setString(2, order.getTitle());
+            pstmt.setInt(3, order.getSectionId());
+            pstmt.setDouble(4, order.getPrice());
+            pstmt.setString(5, order.getDescription());
+            pstmt.setLong(6, order.getDeadline());
+            pstmt.setLong(7, DataUtils.getCurentDateInLong());
 
             pstmt.executeUpdate();
 
-            rs = pstmt.getGeneratedKeys();
+            ResultSet rs = pstmt.getGeneratedKeys();
             int id = 0;
             if (rs.next()) {
                 id = rs.getInt(1);
                 order.setId(id);
             }
             con.commit();
-            con.close();
-            stmt.close();
-            rs.close();
         } catch (Exception ex) {
-            try {
-                con.rollback();
-            } catch (Exception ex2) {
-            }
+            ex.printStackTrace();
         }
     }
 
@@ -660,13 +762,16 @@ public class DbHelper {
 
         int id = set.getInt(KEY_ORDER_ID);
         String title = set.getString(KEY_ORDER_TITLE);
+        int customerId = set.getInt(KEY_ORDER_CUSTOMER_ID);
         int sectionId = set.getInt(KEY_ORDER_SECTION_ID);
         double price = set.getDouble(KEY_ORDER_PRICE);
         String dscrp = set.getString(KEY_ORDER_DESCRIPTION);
         Long deadline = set.getLong(KEY_ORDER_DEADLINE);
-        Long createdDate = set.getLong(KEY_ORDER_CREATED_DATE);
+        Long createdDate
+             = set.getLong(KEY_ORDER_CREATED_DATE);
 
         Order order = new Order(id, title, sectionId, price, dscrp, deadline, createdDate);
+        order.setCustomerId(customerId);
         return order;
     }
 
@@ -674,24 +779,19 @@ public class DbHelper {
         String query = "select * from "
                        + TABLE_ORDERS + " where " + KEY_ORDER_ID + "=" + orderId;
 
-        try {
+        Order order = new Order();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
-                Order order = this.getOrderFromRS(rs);
-                return order;
+                order = this.getOrderFromRS(rs);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
-        return null;
+        return order;
     }
 
     public ArrayList<Order> getOrders() {
@@ -700,21 +800,35 @@ public class DbHelper {
                        + " desc";
 
         ArrayList<Order> result = new ArrayList<>();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 Order order = getOrderFromRS(rs);
-                //loadExecutorServices(executor);
                 result.add(order);
             }
-            con.close();
-            stmt.close();
-            rs.close();
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return result;
+    }
 
+    public ArrayList<Order> getPersonOrdersById(int personId) {
+        String query = "select * from "
+                       + TABLE_ORDERS + " where " + KEY_ORDER_CUSTOMER_ID + "= " + personId + " order by " + KEY_ORDER_CREATED_DATE
+                       + " desc";
+        ArrayList<Order> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Order order = getOrderFromRS(rs);
+                result.add(order);
+            }
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -723,22 +837,18 @@ public class DbHelper {
 
     public ArrayList<Order> getOrdersRecords(int start, int total) {
         ArrayList<Order> list = new ArrayList<>();
-        try {
-            Connection connection = getCurrConnection();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
             int i = total * (start - 1);
-            // int i = total * start;
-            PreparedStatement ps = connection.prepareStatement("SELECT * from " + TABLE_ORDERS + " limit "
-                                                               + i + "," + total);
+            PreparedStatement ps = con.prepareStatement("SELECT * from " + TABLE_ORDERS + " limit "
+                                                        + i + "," + total);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Order order = getOrderFromRS(rs);
                 list.add(order);
             }
-            connection.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -747,35 +857,20 @@ public class DbHelper {
 
     public int getOrderCount() {
         String query = "select count(*) from " + TABLE_ORDERS;
-        try {
-            Connection con = getCurrConnection();
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+        int count = 0;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
-                int count = rs.getInt(1);
-                con.close();
-                stmt.close();
-                rs.close();
-                return count;
-            }
+                count = rs.getInt(1);
 
+            }
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
-        return -1;
-    }
-
-    public Connection getCurrConnection() {
-        Connection con2 = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return con;
+        return count;
     }
 
     public ArrayList<Order> getOrders(Order_search search) {
@@ -808,21 +903,15 @@ public class DbHelper {
         }
         sql += " ORDER BY " + KEY_ORDERNPERSON_PART_ID + " DESC";
 
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(sql);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
                 Order order = getOrderFromRS(rs);
-                //loadExecutorServices(executor);
                 result.add(order);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -832,36 +921,29 @@ public class DbHelper {
     public void updateOrder(Order order) {
         String query = "UPDATE " + TABLE_ORDERS + " SET "
                        + KEY_ORDER_TITLE + "='" + order.getTitle() + "', "
-                       + KEY_ORDER_SECTION_ID + "=' " + order.getSection() + "', "
+                       + KEY_ORDER_SECTION_ID + "=' " + order.getSectionId() + "', "
                        + KEY_ORDER_PRICE + "= " + order.getPrice() + ", "
                        + KEY_ORDER_DESCRIPTION + "= '" + order.getDescription() + "', "
                        + KEY_ORDER_DEADLINE + "= " + order.getDeadline()
                        + " WHERE " + KEY_ORDER_ID + " = " + order.getId();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void deleteOrder(int orderId) {
         String query = "DELETE * FROM " + TABLE_ORDERS + " WHERE "
                        + KEY_ORDER_ID + "=" + orderId;
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
     // </editor-fold>
@@ -870,9 +952,9 @@ public class DbHelper {
     public void addService(Service service) {
         String query = "INSERT INTO " + TABLE_SERVICE + "(" + KEY_SERVICE_TITLE + ", "
                        + KEY_SERVICE_PRICE + ") VALUES ( ?,?)";
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
+
             con.setAutoCommit(false);
             PreparedStatement pstmt
                               = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -882,21 +964,15 @@ public class DbHelper {
 
             pstmt.executeUpdate();
 
-            rs = pstmt.getGeneratedKeys();
+            ResultSet rs = pstmt.getGeneratedKeys();
             int id = 0;
             if (rs.next()) {
                 id = rs.getInt(1);
                 service.setId(id);
             }
             con.commit();
-            con.close();
-            stmt.close();
-            rs.close();
         } catch (Exception ex) {
-            try {
-                con.rollback();
-            } catch (Exception ex2) {
-            }
+            ex.printStackTrace();
         }
     }
 
@@ -904,51 +980,50 @@ public class DbHelper {
 
         String query = "select * from "
                        + TABLE_SERVICE + " where " + KEY_SERVICE_ID + " = " + serviceId;
-
-        try {
+        Service s = new Service();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
-                Service s = this.getServiceFromRS(rs);
-                return s;
+                s = this.getServiceFromRS(rs);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
 
-        return null;
+        return s;
     }
 
-    public ArrayList<Service> getServices() {
-        String query = "select * from "
-                       + TABLE_SERVICE + " order by " + KEY_SERVICE_ID + " desc";
-
-        ArrayList<Service> result = new ArrayList<>();
-        try {
+    public void createExecutorServices(Executor executor) {
+        if (executor.getServices() == null || executor.getId() == 0) {
+            return;
+        }
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
 
-            while (rs.next()) {
-                Service s = this.getServiceFromRS(rs);
-                result.add(s);
+            for (Service service : executor.getServices()) {
+                String sql = "INSERT INTO " + TABLE_SERVICE + "("
+                             + KEY_SERVICE_PRICE + ", " + KEY_SERVICE_TITLE
+                             + ") VALUES (" + service.getPrice() + ", '" + service.getTitle() + "')";
+
+                Statement stmt = con.createStatement();
+                stmt.execute(sql);
+
+                String sqlMaxId = "SELECT MAX(" + KEY_SERVICE_ID + ") FROM "
+                                  + TABLE_SERVICE;
+                int maxId = 0;
+                ResultSet rs = stmt.executeQuery(sqlMaxId);
+                if (rs.first()) {
+                    maxId = rs.getInt(1);
+                }
+                service.setId(maxId);
+
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
-        return result;
     }
 
     public void loadExecutorServices(Executor executor) {
@@ -958,34 +1033,30 @@ public class DbHelper {
                      + " FROM "
                      + TABLE_SERVICE + " JOIN " + TABLE_EXECUTORNSERVICES + " ON "
                      + TABLE_SERVICE + "." + KEY_SERVICE_ID + "=" + TABLE_EXECUTORNSERVICES
-                     + "." + KEY_EXECUTONSERVICES_SERVICE_ID + " WHERE " + TABLE_EXECUTORNSERVICES
+                     + "." + KEY_EXECUTORNSERVICES_SERVICE_ID + " WHERE " + TABLE_EXECUTORNSERVICES
                      + "." + KEY_EXECUTORNSERVICES_EXECUTOR_ID + "=" + executor.getId();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(sql);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
 
-            //SELECT distinct Service.ed, service.title, service.price from service
-            /*join executernservices
-         on service._id = executernservices.serviceid
-         where executernservices.executorid = executorid
+//SELECT distinct Service.ed, service.title, service.price from service
+/*join executernservices
+on service._id = executernservices.serviceid
+where executernservices.executorid = executorid
              */
             if (executor.getServices() != null && !(executor.getServices().isEmpty())) {
                 executor.getServices().clear();
             }
             while (rs.next()) {
-//            String serviceTitle = c2.getString(1);
-//            int serviceId = c2.getInt(2);
-//            Service service = new Service();
-//            service.setId(serviceId);
-                //service.setTitle(serviceTitle);
+// String serviceTitle = c2.getString(1);
+// int serviceId = c2.getInt(2);
+// Service service = new Service();
+// service.setId(serviceId);
+//service.setTitle(serviceTitle);
                 Service service = new Service(rs.getInt(KEY_SERVICE_ID), rs.getString(KEY_SERVICE_TITLE), rs.getDouble(KEY_SERVICE_PRICE));
                 executor.getServices().add(service);
             }
-            con.close();
-            stmt.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -997,31 +1068,40 @@ public class DbHelper {
                        + KEY_SERVICE_TITLE + "='" + service.getTitle() + "', "
                        + KEY_SERVICE_PRICE + "=" + service.getPrice()
                        + " WHERE " + KEY_SERVICE_ID + " = " + service.getId();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteExecutorServices(int executorId) {
+        if (executorId == 0) {
+            return;
+        }
+        String query = "DELETE FROM " + TABLE_SERVICE + " WHERE " + KEY_SERVICE_ID + " IN ( SELECT " + KEY_SERVICE_ID + " FROM "
+                       + TABLE_EXECUTORNSERVICES + " WHERE " + KEY_EXECUTORNSERVICES_EXECUTOR_ID + " = " + executorId + ")";
+
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void deleteService(int serviceId) {
         String query = "DELETE * FROM " + TABLE_SERVICE + " WHERE "
                        + KEY_SERVICE_ID + "=" + serviceId;
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -1033,22 +1113,23 @@ public class DbHelper {
         return service;
     }
 
-    //</editor-fold>
-    //<editor-fold desc="EXECUTORNSERVICES">
-    public void addExecutorNServices(int executorId, int serviceId) {
-
-        String query = "INSERT INTO " + TABLE_EXECUTORNSERVICES + "(" + KEY_EXECUTORNSERVICES_EXECUTOR_ID + ", "
-                       + KEY_EXECUTONSERVICES_SERVICE_ID + ") VALUES ( " + executorId + "," + serviceId + " )";
-        try {
+//</editor-fold>
+//<editor-fold desc="EXECUTORNSERVICES">
+    public void onExecutorServicesCreate(Executor executor) {
+        if (executor.getServices() == null || executor.getId() == 0) {
+            return;
+        }
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
+            for (Service service : executor.getServices()) {
+                String query = "INSERT INTO " + TABLE_EXECUTORNSERVICES + "(" + KEY_EXECUTORNSERVICES_EXECUTOR_ID + ", "
+                               + KEY_EXECUTORNSERVICES_SERVICE_ID + ") VALUES ( " + executor.getId() + "," + service.getId() + " )";
+                Statement stmt = con.createStatement();
+                stmt.execute(query);
+            }
 
-            stmt = con.createStatement();
-            stmt.execute(query);
-
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -1056,121 +1137,115 @@ public class DbHelper {
         if (executor.getServices() == null || executor.getId() == 0) {
             return;
         }
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            deleteFromExecutorNServicesByExecutorId(executor.getId());
+
+            Statement stmt = con.createStatement();
+
+            for (Service service : executor.getServices()) {
+                String sql = "INSERT INTO " + TABLE_EXECUTORNSERVICES + "("
+                             + KEY_EXECUTORNSERVICES_EXECUTOR_ID + ", " + KEY_EXECUTORNSERVICES_SERVICE_ID
+                             + ") VALUES (" + executor.getId() + ", " + service.getId() + ")";
+
+                stmt.execute(sql);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteFromExecutorNServicesByExecutorId(int id) {
+        String sql = "DELETE FROM " + TABLE_EXECUTORNSERVICES + " WHERE " + KEY_EXECUTORNSERVICES_EXECUTOR_ID + " = " + id;
+
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(sql);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateExecutorServices(Executor executor) {
+        if (executor.getServices() == null || executor.getId() == 0) {
+            return;
+        }
 
         String sql = "DELETE FROM " + TABLE_EXECUTORNSERVICES
                      + " WHERE " + KEY_EXECUTORNSERVICES_EXECUTOR_ID + "=" + executor.getId();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(sql);
 
-            //SELECT distinct Service.ed, service.title, service.price from service
-            /*join executernservices
-         on service._id = executernservices.serviceid
-         where executernservices.executorid = executorid
+//SELECT distinct Service.ed, service.title, service.price from service
+/*join executernservices
+on service._id = executernservices.serviceid
+where executernservices.executorid = executorid
              */
+            deleteExecutorServices(executor.getId());
             for (Service service : executor.getServices()) {
                 sql = "INSERT INTO " + TABLE_EXECUTORNSERVICES + "("
-                      + KEY_EXECUTORNSERVICES_EXECUTOR_ID + ", " + KEY_EXECUTONSERVICES_SERVICE_ID
+                      + KEY_EXECUTORNSERVICES_EXECUTOR_ID + ", " + KEY_EXECUTORNSERVICES_SERVICE_ID
                       + ") VALUES (" + executor.getId() + ", " + service.getId() + ")";
                 stmt.execute(sql);
             }
-            con.close();
-            stmt.close();
-            rs.close();
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
     }
 
-    //</editor-fold>
+//</editor-fold>
     //<editor-fold desc="Section">
     public void addSection(Section section) {
-        String query = "INSERT INTO " + TABLE_SECTION + "(" + KEY_SECTION_TITLE + ") VALUES ( '"
+        String query = "INSERT INTO " + TABLE_SECTIONS + "(" + KEY_SECTION_TITLE + ") VALUES ( '"
                        + section.getTitle() + ")";
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
 
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public Section getSection(int sectionId) {
 
         String query = "select * from "
-                       + TABLE_SECTION + " where " + KEY_SECTION_ID + "=" + sectionId;
+                       + TABLE_SECTIONS + " where " + KEY_SECTION_ID + "=" + sectionId;
 
-        try {
+        Section n = new Section();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
                 int id = rs.getInt(KEY_SECTION_ID);
                 String title = rs.getString(KEY_SECTION_TITLE);
-                Section section = new Section(id, title);
-                return section;
+                n.setId(id);
+                n.setTitle(title);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
 
-        return null;
-    }
-
-    public void updateSection(Section c) {
-        String query = "UPDATE " + TABLE_SECTION + " SET "
-                       + KEY_SECTION_TITLE + "='" + c.getTitle() + "', "
-                       + " WHERE " + KEY_SECTION_ID + "=" + c.getId();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
-            stmt.execute(query);
-            con.close();
-            stmt.close();
-        } catch (Exception ex) {
-        }
-    }
-
-    public void deleteSection(int id) {
-        String query = "DELETE * FROM " + TABLE_SECTION + " WHERE "
-                       + KEY_SECTION_ID + "=" + id;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
-            stmt.execute(query);
-            con.close();
-            stmt.close();
-        } catch (Exception ex) {
-        }
+        return n;
     }
 
     public ArrayList<Section> getSections() {
         String query = "select * from "
-                       + TABLE_SECTION + " order by " + KEY_SECTION_ID + " desc";
+                       + TABLE_SECTIONS + " order by " + KEY_SECTION_ID + " desc";
 
         ArrayList<Section> result = new ArrayList<>();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 int id = rs.getInt(KEY_SECTION_ID);
@@ -1178,10 +1253,6 @@ public class DbHelper {
                 Section section = new Section(id, title);
                 result.add(section);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -1190,23 +1261,18 @@ public class DbHelper {
 
     public ArrayList<String> getSectionsInString() {
         String query = "select * from "
-                       + TABLE_SECTION + " order by " + KEY_SECTION_ID;
+                       + TABLE_SECTIONS + " order by " + KEY_SECTION_ID;
 
         ArrayList<String> result = new ArrayList<>();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 String title = rs.getString(KEY_SECTION_TITLE);
                 result.add(title);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -1216,22 +1282,17 @@ public class DbHelper {
     public int getSectionByTitle(String title) {
 
         String query = "select " + KEY_SECTION_ID + " from "
-                       + TABLE_SECTION + " where " + KEY_SECTION_TITLE + " = '" + title + "'";
+                       + TABLE_SECTIONS + " where " + KEY_SECTION_TITLE + " = '" + title + "'";
 
         int id = -1;
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
                 id = rs.getInt(KEY_SECTION_ID);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
@@ -1241,23 +1302,26 @@ public class DbHelper {
 
     //</editor-fold>
     // <editor-fold desc="Notification">
-    public void addNotify(Notify n) {
-        String query = "INSERT INTO " + TABLE_NOTIFY + "(" + KEY_NOTIFY_PERSON_ID
-                       + ", " + KEY_NOTIFY_TEXT + "," + KEY_NOTIFY_CREATED_DATE
-                       + ") VALUES (" + n.getPersonid() + " , '"
-                       + n.getText() + " ', "
-                       + DataUtils.getCurentDateInLong() + ")";
-        try {
+    public void createNotify(Notify notify) {
+        String query = "INSERT INTO " + TABLE_NOTIFY + "(" + KEY_NOTIFY_PERSONID + "," + KEY_NOTIFY_TEXT + ","
+                       + KEY_NOTIFY_CREATED_DATE + "," + KEY_NOTIFY_SECTION_ID + "," + KEY_NOTIFY_SRC_ID + "," + KEY_NOTIFY_STATUS_ID
+                       + ") VALUES (" + notify.getPersonId() + " , '" + notify.getText() + "', "
+                       + notify.getCreatedDate() + ", " + notify.getSectionId() + ", " + notify.getSrcId() + ", " + notify.getStatus() + ")";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
 
-            // query = "SELECT MAX(id) FROM users";
-            con.close();
-            stmt.close();
+            query = "SELECT MAX(id) FROM users";
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.first()) {
+                int id = rs.getInt(1);
+                notify.setId(id);
+            }
+
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -1266,145 +1330,239 @@ public class DbHelper {
         String query = "select * from "
                        + TABLE_NOTIFY + " where" + " " + KEY_NOTIFY_ID + "=" + notifyId;
 
-        try {
+        Notify n = new Notify();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
                 int id = rs.getInt(KEY_NOTIFY_ID);
                 String text = rs.getString(KEY_NOTIFY_TEXT);
-                int personId = rs.getInt(KEY_NOTIFY_PERSON_ID);
+                int personId = rs.getInt(KEY_NOTIFY_PERSONID);
                 Long createdDate = rs.getLong(KEY_NOTIFY_CREATED_DATE);
 
-                Notify notify = new Notify(id, personId, text, createdDate);
-                return notify;
-            }
-            con.close();
-            stmt.close();
-            rs.close();
+                n.setId(id);
 
+                n.setText(text);
+                n.setPersonId(personId);
+                n.setCreatedDate(createdDate);
+            }
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
 
-        return null;
+        return n;
     }
 
-    public void updateNotify(Notify notify) {
+    public void setMyNotifiesToChecked(HttpServletRequest request) {
         String query = "UPDATE " + TABLE_NOTIFY + " SET "
-                       + KEY_NOTIFY_PERSON_ID + "=' " + notify.getPersonid() + "', "
-                       + KEY_NOTIFY_TEXT + "='" + notify.getText() + "', "
-                       + KEY_NOTIFY_CREATED_DATE + " = " + notify.getCreatedDate()
-                       + " WHERE " + KEY_NOTIFY_ID + "=" + notify.getId();
-        try {
+                       + KEY_NOTIFY_STATUS_ID + " = 1 "
+                       + " WHERE " + KEY_NOTIFY_PERSONID + "=" + Account.getCurrentPerson(request).getId();
+        int count = 0;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
 
-            con.close();
-            stmt.close();
-        } catch (Exception ex) {
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
         }
     }
 
     public void deleteNotify(int id) {
         String query = "DELETE * FROM " + TABLE_NOTIFY + " WHERE "
                        + KEY_NOTIFY_ID + "=" + id;
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    public ArrayList<Notify> getNotices() {
+    public ArrayList<Notify> getAllMyNotifies(HttpServletRequest request) {
         String query = "select * from "
-                       + TABLE_NOTIFY + " order by " + KEY_NOTIFY_ID
-                       + " desc";
+                       + TABLE_NOTIFY + " where " + KEY_NOTIFY_PERSONID + "=" + Account.getCurrentPerson(request).getId()
+                       + " order by " + KEY_NOTIFY_CREATED_DATE + " desc ";
 
         ArrayList<Notify> result = new ArrayList<>();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 int id = rs.getInt(KEY_NOTIFY_ID);
+                int personId = rs.getInt(KEY_NOTIFY_PERSONID);
+                int srcId = rs.getInt(KEY_NOTIFY_SRC_ID);
                 String text = rs.getString(KEY_NOTIFY_TEXT);
-                int personId = rs.getInt(KEY_NOTIFY_PERSON_ID);
                 Long createdDate = rs.getLong(KEY_NOTIFY_CREATED_DATE);
-                Notify notify = new Notify(id, personId, text, createdDate);
-                //loadExecutorServices(executor);
+                int sectionId = rs.getInt(KEY_NOTIFY_SECTION_ID);
+                int status = rs.getInt(KEY_NOTIFY_STATUS_ID);
+
+                Notify notify = new Notify(id, personId, text, createdDate, sectionId, srcId, status);
                 result.add(notify);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
         return result;
     }
 
-    //</editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Bookmark">
-    public void addBookmark(Bookmarks bookmr) {
-        String query = "INSERT INTO " + TABLE_BOOKMARKS + "(" + KEY_BOOKMARK_PERSON_ID
-                       + ", " + KEY_BOOKMARK_EXECUTOR_ID
-                       + ") VALUES (" + bookmr.getPersonId() + " , "
-                       + bookmr.getExecutorId() + ")";
-        try {
+    public int getCountOfAllMyNewNotifies(HttpServletRequest request) {
+        String query = "select count(*) from "
+                       + TABLE_NOTIFY + " where " + KEY_NOTIFY_PERSONID
+                       + "=" + Account.getCurrentPerson(request).getId() + " and " + KEY_NOTIFY_STATUS_ID + " = " + 0;
+        int count = 0;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
-            stmt = con.createStatement();
-            stmt.execute(query);
-
-            con.close();
-            stmt.close();
-        } catch (Exception ex) {
-        }
-    }
-
-    public Bookmarks getBookmark(int bookmarkId) {
-
-        String query = "select * from "
-                       + TABLE_BOOKMARKS + " where" + " " + KEY_BOOKMARK_PART_ID + "=" + bookmarkId;
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
-
-            if (rs.next()) {
-                int id = rs.getInt(KEY_BOOKMARK_PART_ID);
-                int personId = rs.getInt(KEY_BOOKMARK_PERSON_ID);
-                int executorId = rs.getInt(KEY_BOOKMARK_EXECUTOR_ID);
-
-                Bookmarks bookmark = new Bookmarks(id, personId, executorId);
-                return bookmark;
+            if (rs.first()) {
+                count = rs.getInt(1);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
+        return count;
+    }
 
-        return null;
+//</editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Bookmark">
+    public void putExecutorInMyBookmarks(HttpServletRequest request, int executorId) {
+
+        String query = "INSERT INTO " + TABLE_BOOKMARKS + "(" + KEY_BOOKMARK_PERSON_ID
+                       + ", " + KEY_BOOKMARK_EXECUTOR_ID + ", " + KEY_BOOKMARK_ORDER_ID
+                       + ") VALUES (" + Account.getCurrentPerson(request).getId() + " , "
+                       + executorId + " , " + 0 + ")";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void putOrderInMyBookmarks(int orderId, HttpServletRequest request) {
+
+        String query = "INSERT INTO " + TABLE_BOOKMARKS + "(" + KEY_BOOKMARK_PERSON_ID
+                       + ", " + KEY_BOOKMARK_EXECUTOR_ID + ", " + KEY_BOOKMARK_ORDER_ID
+                       + ") VALUES (" + Account.getCurrentPerson(request).getId() + " , "
+                       + 0 + " , " + orderId + ")";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Bookmarks getBookmarkByOrderId(int orderId, HttpServletRequest request) {
+        String query = "select * from "
+                       + TABLE_BOOKMARKS + " where" + " " + KEY_BOOKMARK_ORDER_ID + "=" + orderId
+                       + " and " + KEY_BOOKMARK_PERSON_ID + " = " + Account.getCurrentPerson(request).getId();
+
+        Bookmarks b = new Bookmarks();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt(KEY_BOOKMARK_PART_ID);
+                int personId = rs.getInt(KEY_BOOKMARK_PERSON_ID);
+
+                b.setId(id);
+                b.setPersonId(personId);
+                b.setExecutorId(0);
+                b.setOrderId(orderId);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return b;
+    }
+
+    public Bookmarks getBookmarkByExecutorId(int executorId, HttpServletRequest request) {
+        String query = "select * from " + TABLE_BOOKMARKS + " where"
+                       + " " + KEY_BOOKMARK_EXECUTOR_ID + "=" + executorId
+                       + " and " + KEY_BOOKMARK_PERSON_ID + " = " + Account.getCurrentPerson(request).getId();
+
+        Bookmarks b = new Bookmarks();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt(KEY_BOOKMARK_PART_ID);
+                int personId = rs.getInt(KEY_BOOKMARK_PERSON_ID);
+
+                b.setId(id);
+                b.setPersonId(personId);
+                b.setExecutorId(executorId);
+                b.setOrderId(0);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return b;
+    }
+
+    public ArrayList<Bookmarks> getExecutorsListFromMyBookmarks(HttpServletRequest request) {
+        String query = "select * from "
+                       + TABLE_BOOKMARKS + " where " + KEY_BOOKMARK_PERSON_ID + " = " + Account.getCurrentPerson(request).getId()
+                       + " and " + KEY_BOOKMARK_EXECUTOR_ID + " is not 0 "
+                       + " order by " + KEY_BOOKMARK_PART_ID + " desc";
+        ArrayList<Bookmarks> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt(KEY_BOOKMARK_PART_ID);
+                int personId = rs.getInt(KEY_BOOKMARK_PERSON_ID);
+                int executorId = rs.getInt(KEY_BOOKMARK_EXECUTOR_ID);
+                Bookmarks bookm = new Bookmarks(id, personId, executorId, 0);
+                result.add(bookm);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return result;
+    }
+
+    public ArrayList<Bookmarks> getOrdersListFromMyBookmarks(HttpServletRequest request) {
+        String query = "SELECT * FROM "
+                       + TABLE_BOOKMARKS + " WHERE " + KEY_BOOKMARK_PERSON_ID + " = " + Account.getCurrentPerson(request).getId() + " AND " + KEY_BOOKMARK_ORDER_ID + " IS NOT 0 "
+                       + " ORDER BY " + KEY_BOOKMARK_PART_ID + " DESC";
+        ArrayList<Bookmarks> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt(KEY_BOOKMARK_PART_ID);
+                int personId = rs.getInt(KEY_BOOKMARK_PERSON_ID);
+                int orderId = rs.getInt(KEY_BOOKMARK_ORDER_ID);
+                Bookmarks bookm = new Bookmarks(id, personId, 0, orderId);
+                result.add(bookm);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return result;
     }
 
     public void updateBookmark(Bookmarks bookmarks) {
@@ -1412,64 +1570,48 @@ public class DbHelper {
                        + KEY_BOOKMARK_PERSON_ID + "=" + bookmarks.getPersonId() + ", "
                        + KEY_BOOKMARK_EXECUTOR_ID + "= " + bookmarks.getExecutorId()
                        + " WHERE " + KEY_BOOKMARK_PART_ID + " = " + bookmarks.getId();
-        try {
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
 
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
 
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    public void deleteBookm(int id) {
-        String query = "DELETE * FROM " + TABLE_BOOKMARKS + " WHERE "
-                       + KEY_BOOKMARK_PART_ID + "=" + id;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
+    public void deleteExecutorFromMyBookmarks(HttpServletRequest request, int executorId) {
 
-            stmt = con.createStatement();
+        String query = "DELETE FROM " + TABLE_BOOKMARKS
+                       + " WHERE " + KEY_BOOKMARK_EXECUTOR_ID + " = " + executorId + " and "
+                       + KEY_BOOKMARK_PERSON_ID + " = " + Account.getCurrentPerson(request).getId();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    public ArrayList<Bookmarks> getBookmarks() {
-        String query = "select * from "
-                       + TABLE_BOOKMARKS + " order by " + KEY_BOOKMARK_PART_ID
-                       + " desc";
+    public void deleteOrderFromMyBookmarks(int orderId, HttpServletRequest request) {
 
-        ArrayList<Bookmarks> result = new ArrayList<>();
-        try {
+        String query = "DELETE FROM " + TABLE_BOOKMARKS
+                       + " WHERE " + KEY_BOOKMARK_ORDER_ID + " = " + orderId + " and "
+                       + KEY_BOOKMARK_PERSON_ID + " = " + Account.getCurrentPerson(request).getId();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
 
-            while (rs.next()) {
-                int id = rs.getInt(KEY_BOOKMARK_PART_ID);
-                int personId = rs.getInt(KEY_BOOKMARK_PERSON_ID);
-                int executorId = rs.getInt(KEY_BOOKMARK_EXECUTOR_ID);
-                Bookmarks bookm = new Bookmarks(id, personId, executorId);
-                result.add(bookm);
-            }
-            con.close();
-            stmt.close();
-            rs.close();
-
-        } catch (Exception sqlEx) {
-            sqlEx.printStackTrace();
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        return result;
     }
+
     // </editor-fold>
-
     //<editor-fold desc="EXECUTNPERSON">
     public int getExecutorIdByPersonId(int personId) {
         Person p = this.getPerson(personId);
@@ -1480,149 +1622,523 @@ public class DbHelper {
         String query = "SELECT " + KEY_EXECUTORNPERSON_EXECUTOR_ID
                        + " FROM " + TABLE_EXECUTORNPERSON + " WHERE " + KEY_EXECUTORNPERSON_PERSON_ID + "= " + personId;
 
-        try {
+        int rId = -1;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.first()) {
-                int executorId = rs.getInt(KEY_EXECUTORNPERSON_EXECUTOR_ID);
-                Executor executor = getExecutor(executorId);
-                if (executor == null) {
-                    return -1;
-                }
-                else {
-                    return executorId;
-                }
+                rId = rs.getInt(1);
             }
-            con.close();
-            stmt.close();
-            rs.close();
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
 
-        return -1;
+        return rId;
     }
 
-    //</editor-fold>
-    //<editor-fold desc="Responses">
-    public void addResponse(Response response) {
-        String query = "INSERT INTO " + TABLE_RESPONSE + "(" + KEY_RESPONSE_ORDER_ID + ", " + KEY_RESPONSE_PERSON_ID
-                       + ", " + KEY_RESPONSE_PRICE + ", " + KEY_RESPONSE_TEXT + ") VALUES (" + response.getOrderId() + ",  "
-                       + response.getPersonId() + ", " + response.getPrice()
-                       + ",  '" + response.getText() + "')";
-        try {
+    public void onExecutorCreate(Executor executor) {
+        String query = "INSERT INTO " + TABLE_EXECUTORNPERSON + "(" + KEY_EXECUTORNPERSON_EXECUTOR_ID
+                       + ", " + KEY_EXECUTORNPERSON_PERSON_ID
+                       + ") VALUES (" + executor.getId() + " , "
+                       + executor.getPersonId() + ")";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
 
-            con.close();
-            stmt.close();
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+    }
+
+    public int getPersonIdByExecutorId(int executorId) {
+        Executor r = this.getExecutor(executorId);
+        if (r == null) {
+            return -1;
+        }
+
+        String query = "SELECT " + KEY_EXECUTORNPERSON_PERSON_ID
+                       + " FROM " + TABLE_EXECUTORNPERSON + " WHERE " + KEY_EXECUTORNPERSON_EXECUTOR_ID + "= " + executorId;
+
+        int rId = 0;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.first()) {
+                rId = rs.getInt(1);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+
+        return rId;
+    }
+
+    public void onExecutorDelete(int executorId) {
+        String query = "DELETE FROM " + TABLE_EXECUTORNPERSON + " WHERE "
+                       + KEY_EXECUTORNPERSON_EXECUTOR_ID + " = "
+                       + executorId;
+
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+    }
+
+//</editor-fold>
+//<editor-fold desc="Responses">
+    public void addResponse(Response response) {
+        String query = "INSERT INTO " + TABLE_RESPONSES + "(" + KEY_RESPONSES_ORDER_ID + ", " + KEY_RESPONSES_PERSON_ID
+                       + ", " + KEY_RESPONSES_SUGGESTEDPRICE + ", " + KEY_RESPONSES_TEXT + ") VALUES (?,?,?,?)";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            con.setAutoCommit(false);
+            PreparedStatement pstmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            pstmt.setInt(1, response.getOrderId());
+            pstmt.setInt(2, response.getPersonId());
+            pstmt.setDouble(3, response.getPrice());
+            pstmt.setString(4, response.getText());
+
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.first()) {
+                response.setId(1);
+            }
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public Response getResponse(int id) {
 
-        String query = "select * from " + TABLE_RESPONSE
-                       + " where " + KEY_RESPONSE_ID + "=" + id;
+        String query = "select * from " + TABLE_RESPONSES
+                       + " where " + KEY_RESPONSES_ID + "=" + id;
 
-        try {
+        Response s = new Response();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             if (rs.next()) {
-                Response s = this.getResponseFromRs(rs);
-                return s;
+                s = this.getResponseFromRs(rs);
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
+        return s;
+    }
 
-        return null;
+    public int getPersonIdByResponseId(int responsId) {
+
+        String query = "SELECT " + KEY_RESPONSES_PERSON_ID
+                       + " FROM " + TABLE_RESPONSES + " WHERE " + KEY_RESPONSES_ID + "= " + responsId;
+
+        int s = 0;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                s = rs.getInt(1);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return s;
     }
 
     public void updateResponse(Response r) {
-        String query = "UPDATE " + TABLE_RESPONSE + " SET "
-                       + KEY_RESPONSE_ORDER_ID + "=" + r.getOrderId() + ", "
-                       + KEY_RESPONSE_PERSON_ID + "=" + r.getPersonId() + ", "
-                       + KEY_RESPONSE_PRICE + "=" + r.getPrice() + ", "
-                       + KEY_RESPONSE_TEXT + "= " + r.getText() + ", "
-                       + " WHERE " + KEY_RESPONSE_ID + "=" + r.getId();
-        try {
+        String query = "UPDATE " + TABLE_RESPONSES + " SET "
+                       + KEY_RESPONSES_SUGGESTEDPRICE + "=" + r.getPrice() + ", "
+                       + KEY_RESPONSES_TEXT + "= " + r.getText() + ", "
+                       + " WHERE " + KEY_RESPONSES_ID + "=" + r.getId();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-
-            query = "SELECT MAX(id) FROM users";
-
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void deleteResponse(int id) {
-        String query = "DELETE * FROM " + TABLE_RESPONSE + " WHERE "
-                       + KEY_RESPONSE_ID + "=" + id;
-        try {
+        String query = "DELETE * FROM " + TABLE_RESPONSES + " WHERE "
+                       + KEY_RESPONSES_ID + "=" + id;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             stmt.execute(query);
-            con.close();
-            stmt.close();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    public ArrayList<Response> getResponses() {
-        String query = "select * from "
-                       + TABLE_RESPONSE + " order by " + KEY_RESPONSE_ID
-                       + " desc";
+    public ArrayList<Integer> getRespondedPersonsIdListByOrderId(int orderId) {
+        String query = "SELECT " + KEY_RESPONSES_PERSON_ID + " FROM " + TABLE_RESPONSES + " WHERE "
+                       + KEY_RESPONSES_ORDER_ID + "=" + orderId;
 
-        ArrayList<Response> result = new ArrayList<>();
-        try {
+        ArrayList<Integer> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                Response r = this.getResponseFromRs(rs);
-                result.add(r);
+                result.add(rs.getInt(1));
             }
-            con.close();
-            stmt.close();
-            rs.close();
-
         } catch (Exception sqlEx) {
             sqlEx.printStackTrace();
         }
         return result;
     }
 
+    public ArrayList<Response> getAllOrderResponsesByOrderId(int orderId) {
+        String query = "select * from "
+                       + TABLE_RESPONSES + " where " + KEY_RESPONSES_ORDER_ID + " = " + orderId + " order by " + KEY_RESPONSES_CREATEDDATE
+                       + " asc";
+
+        ArrayList<Response> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Response r = getResponseFromRs(rs);
+                result.add(r);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return result;
+
+    }
+
     private Response getResponseFromRs(ResultSet rs) throws Exception {
-        int id = rs.getInt(KEY_RESPONSE_ID);
-        int orderId = rs.getInt(KEY_RESPONSE_ORDER_ID);
-        int personId = rs.getInt(KEY_RESPONSE_PERSON_ID);
-        double price = rs.getDouble(KEY_RESPONSE_PRICE);
-        String text = rs.getString(KEY_RESPONSE_TEXT);
+        int id = rs.getInt(KEY_RESPONSES_ID);
+        int orderId = rs.getInt(KEY_RESPONSES_ORDER_ID);
+        int personId = rs.getInt(KEY_RESPONSES_PERSON_ID);
+        double price = rs.getDouble(KEY_RESPONSES_SUGGESTEDPRICE);
+        String text = rs.getString(KEY_RESPONSES_TEXT);
+        Long created = rs.getLong(KEY_RESPONSES_CREATEDDATE);
         Response r = new Response(id, orderId, personId, price, text);
+        r.setCreatedDate(created);
         return r;
     }
-    //</editor-fold>
+//</editor-fold>
+
+    //<editor-fold desc="Reviews">
+    public void addReview(Review review) {
+        String query = "INSERT INTO " + TABLE_REVIEWS + "(" + KEY_REVIEW_EXECUTOR_ID
+                       + ", " + KEY_REVIEW_CUSTOMER_ID + ", " + KEY_REVIEW_REVIEW_TEXT + ", "
+                       + KEY_REVIEW_ASSESSMENT + ", " + KEY_REVIEW_CREATED_DATE
+                       + ") VALUES (?,?,?,?,?)";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            PreparedStatement pstmt
+                              = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            pstmt.setInt(1, review.getExecutrId());
+            pstmt.setInt(2, review.getCustomerId());
+            pstmt.setString(3, review.getReview_text());
+            pstmt.setDouble(4, review.getAssessment());
+            pstmt.setLong(5, review.getCreatedDate());
+
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            int rId = 0;
+            if (rs.next()) {
+                rId = rs.getInt(1);
+                review.setId(rId);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Review getReview(int id) {
+
+        String query = "select * from " + TABLE_REVIEWS + " where "
+                       + " " + KEY_REVIEW_PART_ID + "=" + id;
+
+        Review review = new Review();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.first()) {
+                review = getReviewFromRs(rs);
+                loadReviewAnswers(review);
+
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return review;
+    }
+
+    private Review getReviewFromRs(ResultSet rs) throws Exception {
+        int id = rs.getInt(KEY_REVIEW_PART_ID);
+        int executorId = rs.getInt(KEY_REVIEW_EXECUTOR_ID);
+        int customerId = rs.getInt(KEY_REVIEW_CUSTOMER_ID);
+        int assessment = rs.getInt(KEY_REVIEW_ASSESSMENT);
+        String text = rs.getString(KEY_REVIEW_REVIEW_TEXT);
+        Long createddate = rs.getLong(KEY_REVIEW_CREATED_DATE);
+
+        Review review = new Review(id, executorId, customerId, text, assessment);
+        review.setCreatedDate(createddate);
+        return review;
+    }
+
+    public ArrayList<Review> getAllPersonReviewByPersonId(int personId) {
+        String query = "select * from "
+                       + TABLE_REVIEWS + " where " + KEY_REVIEW_EXECUTOR_ID + " = " + personId + " order by "
+                       + KEY_REVIEW_CREATED_DATE
+                       + " desc";
+
+        ArrayList<Review> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Review review = getReviewFromRs(rs);
+                loadReviewAnswers(review);
+                result.add(review);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return result;
+    }
+
+    public ArrayList<Integer> getLeavedReviewPersonsIdList(int personId) {
+        String query = "SELECT " + KEY_REVIEW_CUSTOMER_ID + " FROM " + TABLE_REVIEWS + " WHERE "
+                       + KEY_REVIEW_EXECUTOR_ID + "=" + personId;
+
+        ArrayList<Integer> arrID = new ArrayList();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                arrID.add(rs.getInt(1));
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return arrID;
+    }
+
+    public void updateReview(Review review) {
+        String query = "UPDATE " + TABLE_REVIEWS + " SET "
+                       + KEY_REVIEW_REVIEW_TEXT + "='" + review.getReview_text() + "', "
+                       + KEY_REVIEW_ASSESSMENT + "=" + review.getAssessment()
+                       + " WHERE " + KEY_REVIEW_PART_ID + " = " + review.getId();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteReview(int id) {
+        String query = "DELETE * FROM " + TABLE_REVIEWS + " WHERE "
+                       + KEY_REVIEW_PART_ID + "=" + id;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+//</editor-fold>
+    //<editor-fold desc="ORDERNPERSON">
+    public void onOrderCreate(Order order) {
+        String query = "INSERT INTO " + TABLE_ORDERNPERSON + "(" + KEY_ORDERNPERSON_ORDER_ID
+                       + ", " + KEY_ORDERNPERSON_CUSTOMER_ID
+                       + ") VALUES (" + order.getId() + " , "
+                       + order.getCustomerId() + ")";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+    }
+
+    public int getCustomerIdByOrderId(int orderId) {
+
+        String query = "SELECT " + KEY_ORDERNPERSON_CUSTOMER_ID
+                       + " FROM " + TABLE_ORDERNPERSON + " WHERE " + KEY_ORDERNPERSON_ORDER_ID + "= " + orderId;
+
+        int id = 0;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.first()) {
+                id = rs.getInt(1);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public void onOrderDelete(int orderId) {
+        String query = "delete from " + TABLE_ORDERNPERSON + " where "
+                       + KEY_ORDERNPERSON_ORDER_ID + "= " + orderId;
+
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+    }
+
+//</editor-fold>
+    //<editor-fold desc="Answer">
+    public void addAnswer(Answer answer) {
+        String query = "INSERT INTO " + TABLE_ANSWERS + "(" + KEY_ANSWER_REVIEW_ID + ", " + KEY_ANSWER_WHOANSWERS_ID
+                       + ", " + KEY_ANSWER_WHOPOSTED_ID + ", " + KEY_ANSWER_TEXT + ", " + KEY_ANSWER_CREATED_DATE
+                       + ") VALUES (?,?,?,?,?";
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            con.setAutoCommit(false);
+            PreparedStatement pstmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            pstmt.setInt(1, answer.getReviewId());
+            pstmt.setInt(2, answer.getWhoanswersId());
+            pstmt.setInt(3, answer.getWhopostedId());
+            pstmt.setString(4, answer.getText());
+            pstmt.setLong(5, answer.getCreatedDate());
+
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.first()) {
+                answer.setId(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateAnswer(Answer answer) {
+        String query = "UPDATE " + TABLE_ANSWERS + " SET "
+                       + KEY_ANSWER_TEXT + "='" + answer.getText() + "'"
+                       + " WHERE " + KEY_ANSWER_PART_ID + " = " + answer.getId();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteAnswer(int id) {
+        String query = "DELETE * FROM " + TABLE_ANSWERS + " WHERE "
+                       + KEY_ANSWER_PART_ID + "=" + id;
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            stmt.execute(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public ArrayList<Answer> getAllReviewAnswersByReviewId(int reviewId) {
+        String query = "select * from "
+                       + TABLE_ANSWERS + " where " + KEY_ANSWER_REVIEW_ID + " = " + reviewId + " order by "
+                       + KEY_ANSWER_CREATED_DATE
+                       + " desc";
+
+        ArrayList<Answer> result = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Answer answer = getAnswerFromRs(rs);
+                result.add(answer);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return result;
+    }
+
+    public void loadReviewAnswers(Review review) {
+        String query = "SELECT * FROM "
+                       + TABLE_ANSWERS + " JOIN " + TABLE_REVIEWNANSWERS + " ON "
+                       + TABLE_ANSWERS + "." + KEY_ANSWER_PART_ID + "=" + TABLE_REVIEWNANSWERS
+                       + "." + KEY_REVIEWNANSWERS_ANSWER_ID + " WHERE " + TABLE_REVIEWNANSWERS
+                       + "." + KEY_REVIEWNANSWERS_REVIEW_ID + "=" + review.getId();
+
+        try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            if (review.getAnswers().size() > 0) {
+                review.getAnswers().clear();
+            }
+
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Answer answer = getAnswerFromRs(rs);
+                review.getAnswers().add(answer);
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+
+    }
+
+    private Answer getAnswerFromRs(ResultSet rs) throws Exception {
+        int id = rs.getInt(KEY_ANSWER_PART_ID);
+        int reviewId = rs.getInt(KEY_ANSWER_REVIEW_ID);
+        int whoanswersId = rs.getInt(KEY_ANSWER_WHOANSWERS_ID);
+        int whoposted = rs.getInt(KEY_ANSWER_WHOPOSTED_ID);
+        String text = rs.getString(KEY_ANSWER_TEXT);
+        Long created = rs.getLong(KEY_ANSWER_CREATED_DATE);
+        Answer answer = new Answer(id, reviewId, whoanswersId, whoposted, text, created);
+        return answer;
+    }
+//</editor-fold>
+
 }

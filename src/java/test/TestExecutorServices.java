@@ -62,8 +62,8 @@ public class TestExecutorServices extends HttpServlet {
         Service c = new Service(servicesTitle, price);
         db.addService(c);
 
-        //db.updateExecutorNServices(executor);
-        db.addExecutorNServices(id, c.getId());
+        /*//db.updateExecutorServices(executor);
+        db.addExecutorNServices(id, c.getId());*/
         out.print("end");
     }
 

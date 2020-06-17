@@ -32,7 +32,7 @@ public class MyCabinet extends HttpServlet {
         
         Person person = Account.getCurrentPerson(request);
       
-        if(person == null){
+        if(person == null || person.getId() == 0){
         response.sendRedirect("Login");
         return;
         }

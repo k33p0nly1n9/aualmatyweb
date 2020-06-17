@@ -15,6 +15,7 @@ public class Response {
     private int personId;
     private double price;
    private String text;
+     private Long createdDate;
 
     public Response(int id, int orderId, int personId, double price, String text) {
         this.id = id;
@@ -66,6 +67,14 @@ public class Response {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Long getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Long createdDate) {
+        this.createdDate = createdDate;
     }
    
    

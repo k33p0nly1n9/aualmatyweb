@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package test;
+package controllers.person;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import models.*;
  *
  * @author bayan
  */
-public class TestJson extends HttpServlet {
+public class DeleteCurPersonPhoto extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,50 +31,21 @@ public class TestJson extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        int id = -1;
-        try {
-            id = Integer.parseInt(request.getParameter("id"));
+        
+        Person curPerson = models.Account.getCurrentPerson(request);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DbHelper db = new DbHelper();
-        Person p = db.getPerson(id);
-
-        if (p == null) {
-            JsonObjectBuilder objectBuilder = Json.createObjectBuilder().
-                    add("Error", "person not found");
-            out.print(objectBuilder.build().toString());
+        if (curPerson == null) {
+            response.sendRedirect("Login");
             return;
         }
-
-        JsonObjectBuilder builderr = Json.createObjectBuilder()
-                .add("name", p.getName())
-                .add("lastName", p.getLastname())
-                .add("number", p.getNumber())
-        .add("created", p.getCreatedDate())
-                .add("rating", p.getRating());
-
-        Executor r = db.getExecutor(db.getExecutorIdByPersonId(id));
-        if (r != null && r.getServices().size() >= 1) {
-            db.loadExecutorServices(r);
-            JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
-            for (Service s : r.getServices()) {
-                JsonObjectBuilder servicesBuiler = Json.createObjectBuilder()
-                        .add("id", s.getId())
-                        .add("title", s.getTitle())
-                        .add("price", s.getPrice());
-                arrBuilder.add(servicesBuiler);
-            }
-
-            builderr.add("services", arrBuilder);
-        }
-
-        JsonObject jsonObject = builderr.build();
-        out.print(jsonObject.toString());
-
+  
+        try {
+         DbHelper db = new DbHelper();
+         db.deletePersonPhoto(curPerson.getId());
+        } catch (Exception e) {
+          
+        } 
+        response.sendRedirect("EditProfile");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

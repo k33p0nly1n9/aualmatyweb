@@ -22,7 +22,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Спеециалисты</title>
+        <title>Специалисты</title>
     </head>
     <body>
        <jsp:include page="/WEB-INF/auth/header.jsp"/>
@@ -49,7 +49,6 @@
                 </div>
                 <%}%>
             </div>
-                
                 
         </div>
     </body>

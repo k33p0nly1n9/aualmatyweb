@@ -79,21 +79,25 @@ public class EditProfile extends HttpServlet {
             return;
         }
 
-        String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\WEB-INF\\Content"; //getServletContext().getRealPath("/Content");
+        String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content"; //getServletContext().getRealPath("/Content");
 
-        Part filePart = request.getPart("file");
+        // Part filePart = request.getPart("file");
+        Part filePart = request.getPart("editfile");
         String fileName = DataUtils.generateRandomString(15) + ".jpg";
 
         try {
+            DataUtils.deletePersonImage(person.getPhoto());
             DataUtils.savePhoto(filePart, path, fileName);
             person.setPhoto(fileName);
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         DbHelper db = new DbHelper();
         db.updatePerson(person);
-
+        
+        response.sendRedirect("EditProfile");
     }
 
     /**

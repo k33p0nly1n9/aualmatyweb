@@ -16,10 +16,8 @@ import models.*;
  * @author bayan
  */
 public class Login extends HttpServlet {
-    private static final String LOGIN_JSP = "/WEB-INF/auth/login.jsp";
 
- 
-  
+    private static final String LOGIN_JSP = "/WEB-INF/auth/login.jsp";
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -34,7 +32,7 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         getServletContext().getRequestDispatcher(LOGIN_JSP)
-                    .forward(request, response);
+                .forward(request, response);
     }
 
     /**
@@ -49,25 +47,23 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.getWriter().print("POST");
-        
+
         String numb = request.getParameter("loginNumber");
-       
-         String passwd = request.getParameter("loginPasswd");
-         
-         DbHelper db = new DbHelper();
-         Person p = db.getPersonNP(numb, passwd);
-         
-         if(p == null){
-             request.setAttribute("error", "Пользователь не найден. Проверьте корректность введенных данных ");
-                  getServletContext().getRequestDispatcher(LOGIN_JSP)
+
+        String passwd = request.getParameter("loginPasswd");
+
+        DbHelper db = new DbHelper();
+        Person p = db.getPersonByPasswdNNumb(numb, passwd);
+
+        if (p == null) {
+            request.setAttribute("loginerror", "Пользователь не найден. Проверьте корректность введенных данных ");
+            getServletContext().getRequestDispatcher(LOGIN_JSP)
                     .forward(request, response);
-         }
-         
-         HttpSession session = request.getSession();
-         session.setAttribute("personIdSession", p.getId());
-         
-         
-         response.sendRedirect("MyCabinet");
+        }
+        else {
+            Account.setCurrentPerson(request, p.getId());
+            response.sendRedirect("MyCabinet");
+        }
     }
 
     /**

@@ -5,20 +5,15 @@
  */
 package test;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.json.*;
+import java.io.*;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import models.*;
+import javax.servlet.http.*;
 
 /**
  *
  * @author bayan
  */
-public class TestJson extends HttpServlet {
+public class TestDeleteImage extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,49 +27,27 @@ public class TestJson extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        int id = -1;
+
+        String imagename = request.getParameter("deleteimage");
+
+        String path = "";
+        final PrintWriter writer = response.getWriter();
         try {
-            id = Integer.parseInt(request.getParameter("id"));
+            path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content";
+            
+            File file = new File(path + File.separator + imagename);
+            boolean fileDelete = file.delete();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        DbHelper db = new DbHelper();
-        Person p = db.getPerson(id);
-
-        if (p == null) {
-            JsonObjectBuilder objectBuilder = Json.createObjectBuilder().
-                    add("Error", "person not found");
-            out.print(objectBuilder.build().toString());
-            return;
-        }
-
-        JsonObjectBuilder builderr = Json.createObjectBuilder()
-                .add("name", p.getName())
-                .add("lastName", p.getLastname())
-                .add("number", p.getNumber())
-        .add("created", p.getCreatedDate())
-                .add("rating", p.getRating());
-
-        Executor r = db.getExecutor(db.getExecutorIdByPersonId(id));
-        if (r != null && r.getServices().size() >= 1) {
-            db.loadExecutorServices(r);
-            JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
-            for (Service s : r.getServices()) {
-                JsonObjectBuilder servicesBuiler = Json.createObjectBuilder()
-                        .add("id", s.getId())
-                        .add("title", s.getTitle())
-                        .add("price", s.getPrice());
-                arrBuilder.add(servicesBuiler);
+            if(fileDelete){
+                      writer.println("deleted");
             }
 
-            builderr.add("services", arrBuilder);
+        } catch (Exception e) {
+            writer.println("error");
+            writer.println("</br>" + e.getMessage());
+        } finally {
+          
         }
-
-        JsonObject jsonObject = builderr.build();
-        out.print(jsonObject.toString());
 
     }
 

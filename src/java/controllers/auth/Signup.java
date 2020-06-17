@@ -16,6 +16,7 @@ import models.*;
  * @author bayan
  */
 public class Signup extends HttpServlet {
+
     private static final String SIGNUP_JSP = "/WEB-INF/auth/signup.jsp";
 
     /**
@@ -27,8 +28,6 @@ public class Signup extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -41,8 +40,8 @@ public class Signup extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      getServletContext().getRequestDispatcher(SIGNUP_JSP)
-                    .forward(request, response);
+        getServletContext().getRequestDispatcher(SIGNUP_JSP)
+                .forward(request, response);
     }
 
     /**
@@ -56,39 +55,48 @@ public class Signup extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     String name = request.getParameter("personName");
-     String lastName = request.getParameter("personLast");
-       
-     String passwd = request.getParameter("passwd");
-     String confirm = request.getParameter("confirm");
-     
-    
-     String nm = request.getParameter("number");
-     String numb = "87000000000";
-     if(nm != null)
-     {     numb = nm;
-     }
-          
-     if(!(passwd.equals(confirm))){
-       request.setAttribute("pswdNotEq", "Password mismatch");
-          getServletContext().getRequestDispatcher(SIGNUP_JSP)
-        .forward(request, response);
-          return;
-         }
-     
-     DbHelper db = new DbHelper();
-     Person p = db.getPersonByNumb(numb);
-     if(p!=null){
-     request.setAttribute("sameNumb", "Пользователь с таким номером уже зарегистрирован");
-        getServletContext().getRequestDispatcher(SIGNUP_JSP)
-        .forward(request, response);
-        return;
-     }
-     
-     
-         Person person = new Person(name, lastName,passwd, numb, 0);
-        db.addPerson(person);
-         response.sendRedirect("Login");
+        String name = request.getParameter("personName");
+        String lastName = request.getParameter("personLast");
+
+        String passwd = request.getParameter("passwd");
+        String confirm = request.getParameter("confirm");
+
+        Long birthday = 0L;
+        try {
+            String b = request.getParameter("birthday");
+            birthday = DataUtils.convertDataToLongWithRawString(b);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String numb = request.getParameter("number");
+
+        if (!(passwd.equals(confirm))) {
+            request.setAttribute("signuperror", "Password mismatch");
+            getServletContext().getRequestDispatcher(SIGNUP_JSP)
+                    .forward(request, response);
+        }
+        else {
+
+            DbHelper db = new DbHelper();
+            Person p = db.getPersonByNumb(numb);
+            if (p != null) {
+                request.setAttribute("signuperror", "Пользователь с таким номером уже зарегистрирован");
+                getServletContext().getRequestDispatcher(SIGNUP_JSP)
+                        .forward(request, response);
+            }
+            else {
+
+                Person person = new Person(name, lastName, passwd, numb, 0);
+
+                if (request.getParameter("birthday") != null) {
+                    person.setBirthday(birthday);
+                }
+
+                db.addPerson(person);
+                response.sendRedirect("Login");
+            }
+        }
     }
 
     /**

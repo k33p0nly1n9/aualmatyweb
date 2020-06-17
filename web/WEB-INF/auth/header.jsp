@@ -3,22 +3,21 @@
 <%@page import="models.Person"%>
 <%
     Person person = Account.getCurrentPerson(request);
-    String currentNav = (String)request.getAttribute("navCurr");
-    
+    String currentNav = (String) request.getAttribute("navCurr");
 
 
 %>
-   <!-- <li class="nav-item dropdown">
-                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                     Dropdown
-                 </a>
-                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                     <a class="dropdown-item" href="#">Action</a>
-                     <a class="dropdown-item" href="#">Another action</a>
-                     <div class="dropdown-divider"></div>
-                     <a class="dropdown-item" href="#">Something else here</a>
-                 </div>
-             </li>-->
+<!-- <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropdown
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+          </li>-->
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -41,13 +40,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <% if (person != null) { %>
-            <li class="nav-item  <%if(currentNav=="cabinet"){out.print(" active ");}%> ">
+            <li class="nav-item  <%if (currentNav == "cabinet") {
+                    out.print(" active ");
+                }%> ">
                 <a class="nav-link" href="<%=DataUtils.PATH%>MyCabinet">Профиль <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item <%if(currentNav=="orders"){out.print(" active ");}%>">
+            <li class="nav-item <%if (currentNav == "orders") {
+                    out.print(" active ");
+                }%>">
                 <a class="nav-link" href="<%=DataUtils.PATH%>Orders">Заказы</a>
             </li>
-            <li class="nav-item <%if(currentNav=="mavens"){out.print(" active ");}%>">
+            <li class="nav-item <%if (currentNav == "mavens") {
+                    out.print(" active ");
+                }%>">
                 <a class="nav-link" href="<%=DataUtils.PATH%>Mavens">Специалисты</a>
             </li>
             <li class="nav-item">
@@ -59,12 +64,20 @@
             <% } %>
         </ul>
         <div class="form-inline my-2 my-lg-0">
-              <% if (person == null){ %>
+            <% if (person == null) {%>
+            <% if (currentNav != "login") {%>
             <a href="<%=DataUtils.PATH%>Login" class="btn btn-outline-secondary" role="button" aria-pressed="true">Войти</a>
+            <% } %>
+            <% if (currentNav != "signup") {%>
+
             <a href="<%=DataUtils.PATH%>Signup" style="margin-left: 4px;" class="btn btn-outline-secondary" role="button" aria-pressed="true">Зарегистрироваться</a>
-            <% } else { %>
+
+            <% }%>
+            <% }
+
+            else {%>
             <a href="<%=DataUtils.PATH%>Logout" class="btn btn-outline-secondary" role="button" aria-pressed="true">Выйти</a>
-           
+
             <%}%>
         </div>
     </div>

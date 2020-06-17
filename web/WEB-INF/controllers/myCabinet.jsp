@@ -10,17 +10,14 @@
 
 <%
     Person p = models.Account.getCurrentPerson(request);
-    DbHelper db = new DbHelper();  
-     int personId = p.getId();
+    DbHelper db = new DbHelper();
+    int personId = p.getId();
     Executor executor = null;
-   
     int executorId = db.getExecutorIdByPersonId(personId);
-
     if (executorId != -1) {
         executor = db.getExecutor(executorId);
         db.loadExecutorServices(executor);
     }
-
     request.setAttribute("navCurr", "cabinet");
 %>
 <!DOCTYPE html>
@@ -31,13 +28,18 @@
     </head>
     <body>
         <jsp:include page="/WEB-INF/auth/header.jsp"/>
-        <div class="container">
-            <h4> Мой кабинет<br/><h4>
-                    Имя :<%=p.getName()%><br/>
-                    Фамилия :<%=p.getLastname()%><br/>
-                    Мои услуги: 
+        <div class="container-fluid">
+            <div class="card" ">
+                <div class="row no-gutters">
+                    <div class="col-sm-3" style="background: #868e96;">
+                        <img src="<%=models.DataUtils.getPersonPhotoPath(p)%>" class="card-img-top h-100" alt="...">
+                    </div>
+                    <div>
+                        <b><%=p.getName() + " "+p.getLastname()%></b><br/>
+                    Рейтинг: <%=p.getRating()%> <br/>
+                    Мои услуги: <br/>
                     <%
-                        if (executor == null ||  executor.getServices().isEmpty() ) {
+                        if (executor == null || executor.getServices().isEmpty()) {
                     %>
                     <span style="color: gray">(Пусто)</span>
                     <%
@@ -50,17 +52,16 @@
                             }
                         }
                     %> <br/>
-
-                    <a class="btn btn-secondary" href="EditProfile" role="button">Редактировать</a>
-                    
-                    <a href="Quiziz">Начать тест</a><br/>
-                    <a href="Logout">Выйти</a><br/>
                     </div>
-                    </body>
-                    </html>
+                </div>
+            </div>
+        <a class="btn btn-secondary" href="EditProfile" role="button">Редактировать</a>   
+        </div>
+    </body>
+</html>
 
-                    <!--   
-                    $sessionScope.personIdSession},
-                     $per["lastname"]}
-                    <!-- jsp:useBean id="per" class="Person" scope="session"/>-->
-                    <!--<h3>%=p.getName() +","+ p.getLastname()%></h3>-->
+<!--   
+$sessionScope.personIdSession},
+ $per["lastname"]}
+<!-- jsp:useBean id="per" class="Person" scope="session"/>-->
+<!--<h3>%=p.getName() +","+ p.getLastname()%></h3>-->

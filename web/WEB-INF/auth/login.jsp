@@ -7,7 +7,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    String errorStr = (String) request.getAttribute("error");
+    String errorStr = (String) request.getAttribute("loginerror");
+
+    request.setAttribute("navCurr", "login");
 
 %>
 <!DOCTYPE html>
@@ -20,17 +22,16 @@
         <jsp:include page="header.jsp"/>
         <div class="container">
             <form action="Login" method="post">
-                <h3>Введите свои данные</h3>
+
+
                 <%            if (errorStr != null) {
-                %>
-                <div class="alert alert-info" role="alert">
-                    <%=errorStr%>
-                </div>
-                <%
+                        out.print("<span style='color:red;'>" + errorStr + "</span>");
                     }
                 %>
 
-                <div class="form">
+                <div class="form"> 
+                    <h3>Введите свои данные</h3>
+
                     <div class="col-md-4 mb-3">
                         <label for="loginNumber">Номер телефона</label>
                         <input type="text" class="form-control is-valid" id="loginNumber" name="loginNumber" value="" required>
@@ -45,28 +46,28 @@
                             Пожалуйста, введите валидные данные.
                         </div>
                     </div>
-                  
+
                 </div>
                 <button class="btn btn-primary" type="submit">Авторизоваться</button>
             </form>
         </div>
     </body>
 </html>
-  <!--  </div>
-      
-      
-                      <div class="form-row">-->
-                    <!--<div class="col-md-3 mb-3">
-                        <label for="loginAge">Возраст</label>
-                        <select class="custom-select is-valid" id="loginAge" name="loginAge" required>
-                            <option selected disabled value="">Choose...</option>
-                            <option>14</option>
-                            <option>15</option>
-                            <option>16</option>
-                            <option>17</option>
+<!--  </div>
+    
+    
+                    <div class="form-row">-->
+<!--<div class="col-md-3 mb-3">
+    <label for="loginAge">Возраст</label>
+    <select class="custom-select is-valid" id="loginAge" name="loginAge" required>
+        <option selected disabled value="">Choose...</option>
+        <option>14</option>
+        <option>15</option>
+        <option>16</option>
+        <option>17</option>
 
-                        </select>
-                        <div class="invalid-feedback">
-                            Пожалуйста, введите валидные данные.
-                        </div>
-                    </div>-->
+    </select>
+    <div class="invalid-feedback">
+        Пожалуйста, введите валидные данные.
+    </div>
+</div>-->

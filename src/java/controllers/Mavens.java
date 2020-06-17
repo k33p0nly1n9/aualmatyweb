@@ -43,7 +43,9 @@ public class Mavens extends HttpServlet {
         
         try{
         page = Integer.parseInt(request.getParameter("page"));
-        }catch(Exception e){ }
+        }catch(Exception e){
+        e.printStackTrace();
+        }
         
            
         if(page<=0){

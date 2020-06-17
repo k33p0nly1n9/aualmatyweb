@@ -114,6 +114,14 @@
         <servlet-name>TestStyle</servlet-name>
         <servlet-class>test.TestStyle</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TestDeleteImage</servlet-name>
+        <servlet-class>test.TestDeleteImage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteCurPersonPhoto</servlet-name>
+        <servlet-class>controllers.person.DeleteCurPersonPhoto</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Profile</servlet-name>
         <url-pattern>/Profile</url-pattern>
@@ -221,6 +229,14 @@
     <servlet-mapping>
         <servlet-name>TestStyle</servlet-name>
         <url-pattern>/TestStyle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestDeleteImage</servlet-name>
+        <url-pattern>/TestDeleteImage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeletePersonPhoto</servlet-name>
+        <url-pattern>/DeletePersonPhoto</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -10,16 +10,20 @@ package models;
  * @author bayan
  */
 public class Person {
-    private int id;
+   private int id;
     private String name;
     private String lastname;
     private String passwd;
-       private Long createdDate;
+    private Long createdDate;
     private int rating;
     private String status;
     private String photo;
     private String number;
+    String desciption;
     boolean hasAccount;
+    //upd
+    private Long birthday;
+    public Person(){};
 
     public Person(int id,String name, String lastname, String passwd) {
         this.name = name;
@@ -93,7 +97,14 @@ public class Person {
         this.createdDate = created;
     }
    
-    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -118,24 +129,15 @@ public class Person {
         this.passwd = passwd;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    
     public Long getCreatedDate() {
         return createdDate;
     }
 
-//    public String getCreatedDateinString() {
-//        Long create = this.createdDate;
-//      String str =  DataUtils.convertLongToDataString(create);
-//        return str;
-//    }
+    public String getCreatedDateinString() {
+        Long create = this.createdDate;
+      String str =  DataUtils.convertLongToDataString(create);
+        return str;
+    }
 
 
     public void setCreatedDate(Long createdDate) {
@@ -162,6 +164,29 @@ public class Person {
         this.number = number;
     }
 
+    public boolean isHasAccount() {
+        return hasAccount;
+    }
+
+    public void setHasAccount(boolean hasAccount) {
+        this.hasAccount = hasAccount;
+    }
+
+    public String getDesciption() {
+        return desciption;
+    }
+
+    public void setDesciption(String desciption) {
+        this.desciption = desciption;
+    }
+
+    public Long getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Long birthday) {
+        this.birthday = birthday;
+    }
     public String getPhoto() {
         return photo;
     }
@@ -170,12 +195,5 @@ public class Person {
         this.photo = photo;
     }
 
-    public boolean isHasAccount() {
-        return hasAccount;
-    }
-
-    public void setHasAccount(boolean hasAccount) {
-        this.hasAccount = hasAccount;
-    }
-    
+ 
 }

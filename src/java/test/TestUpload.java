@@ -57,10 +57,7 @@ public class TestUpload extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String path = "";
-        try{
-       path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\WEB-INF\\Content";
-        }catch(Exception e){}
+        String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content";
         Part filePart = request.getPart("file");
         String fileName = DataUtils.generateRandomString(15)+".jpg";
         

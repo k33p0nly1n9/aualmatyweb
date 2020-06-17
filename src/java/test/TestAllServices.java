@@ -32,15 +32,15 @@ public class TestAllServices extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        //PrintWriter out = response.getWriter();
 
-        DbHelper db = new models.DbHelper();
-        ArrayList<Service> services = db.getServices();
+       /* DbHelper db = new models.DbHelper();
+        ArrayList<Service> services = db.getSe();
         for (Service s : services) {
             out.print("Service id=" + s.getId() + "-" + s.getTitle() + "</br>");
 
-           
-        }
+          
+        } */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

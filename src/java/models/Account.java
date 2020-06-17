@@ -1,6 +1,7 @@
 
 package models;
 
+import com.mysql.jdbc.log.*;
 import javax.servlet.http.*;
 
 public class Account {
@@ -13,7 +14,8 @@ public class Account {
 
       try{
           id = (int)session.getAttribute("personIdSession");
-      }catch(Exception e){
+      }catch(Exception ex){
+         ex.printStackTrace();
       }
 
       DbHelper db = new DbHelper();
@@ -21,5 +23,18 @@ public class Account {
         Person person = db.getPerson(id);
         return person;
     }
+    
+   
+    public static void setCurrentPerson(HttpServletRequest request, int id) {
+
+        HttpSession session = request.getSession();
+
+        try {
+            session.setAttribute("personIdSession", id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 
 }

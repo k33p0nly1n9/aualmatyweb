@@ -50,9 +50,9 @@ public class DataUtils {
     }
 
     public static Long convertDataToLongWithRawString(String str) {
-        String day = str.substring(0, 2);
-        String month = str.substring(3, 5);
-        String year = str.substring(6, 10);
+        String day = str.substring(8, 10);
+        String month = str.substring(5, 7);
+        String year = str.substring(0, 4);
         String res = day + "/" + month + "/" + year;
         long startDate = 0;
         try {
@@ -102,24 +102,29 @@ public class DataUtils {
         }
         return result;
     }
-    
-    public static void savePhoto(Part filePart, String path, String fileName) throws Exception{
-        
+
+    public static void savePhoto(Part filePart, String path, String fileName) throws Exception {
+
         OutputStream out = null;
-       InputStream fileContent = null;
-        
-        try{
-        out  = new java.io.FileOutputStream(new File(path + File.separator + fileName));
-        fileContent = filePart.getInputStream();
-        
-        int read = 0;
-        final byte [] bytes = new byte[1024];
-        
-        while((read = fileContent.read(bytes)) != -1){
-        out.write(bytes, 0, read);
-        }
-        
-        }catch(FileNotFoundException e){
+        InputStream fileContent = null;
+
+        try {
+            File mFile = new File(path + File.separator + fileName);
+            mFile.createNewFile();
+
+            //  out = new java.io.FileOutputStream(new File(path + File.separator + fileName));
+            out = new java.io.FileOutputStream(mFile);
+            fileContent = filePart.getInputStream();
+
+            int read = 0;
+            final byte[] bytes = new byte[1024];
+
+            while ((read = fileContent.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } finally {
             if (out != null) {
                 out.close();
@@ -128,11 +133,10 @@ public class DataUtils {
                 fileContent.close();
             }
         }
-        
+
     }
-    
-    
-      public static String getPersonPhotoPath(Person p) {
+
+    public static String getPersonPhotoPath(Person p) {
         if (p.getPhoto() == null || p.getPhoto().equals("")) {
             return "Content/executors_default_image.png";
 
@@ -141,5 +145,20 @@ public class DataUtils {
             return "Content/" + p.getPhoto();
 
         }
+    }
+
+    public static boolean deletePersonImage(String imageName) {
+        String name = imageName + ".jpg";
+        boolean b = false;
+        try {
+            String path = "C:\\Users\\bayan\\OneDrive\\Документы\\NetBeansProjects\\Test\\web\\Content";
+
+            File file = new File(path + File.separator + name);
+           b = file.delete();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return b;
     }
 }
