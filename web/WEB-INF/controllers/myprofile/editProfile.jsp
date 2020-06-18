@@ -22,11 +22,13 @@
     }
 
     request.setAttribute("navCurr", "cabinet");
+
 %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8, width=device-width, initial-scale=1"">
+       
         <title>Настройки кабинета</title>
 
     </head>
@@ -36,11 +38,13 @@
             <div class="card" ">
                 <div class="row no-gutters">
                     <div class="col-sm-3" >
-                        <img src="<%=models.DataUtils.getPersonPhotoPath(p)%>" class="card-img-top h-100" alt="...">
-                        <div class="row no-gutters">
-                            <button class='btn btn-danger btn-sm' data-toggle='modal' data-target='#deletePhoto'>Удалить фотографию</button>
-                            <button class='btn btn-info btn-sm' data-toggle='modal' data-target='#editPhoto'>Сменить</button>
-                        </div> 
+                        <div>
+                            <img src="<%=models.DataUtils.getPersonPhotoPath(p)%>" class="card-img-top h-100" alt="...">
+                            <div class="row no-gutters">
+                                <button class='btn btn-danger btn-sm' data-toggle='modal' data-target='#deletePhoto'>Удалить фотографию</button>
+                                <button class='btn btn-info btn-sm' data-toggle='modal' data-target='#editPhoto'>Сменить</button>
+                            </div> 
+                        </div>
                     </div>
 
                     <div class="col-sm-7" style=" padding: 20px;" >
@@ -76,14 +80,10 @@
                             <button class="btn btn-primary" type="submit">Сохранить</button>
                         </form>
                     </div>
-
-
-
-                    <div class="justify-content-end col-sm-2" >
-                        <nav class="navmenu  navmenu-fixed-right" role="navigation">
-                            <a class="navmenu-brand active" href="#">Персональные данные</a>
-                            <a class="navmenu-brand" href="#">Контакты</a>
-                        </nav>
+                 
+                    <div class="nav flex-column nav-pills  col-sm-2 col-md-2 col-lg-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-home-tab" href="<%=DataUtils.PATH%>EditProfile" role="tab"  aria-selected="true">Персональные данные</a>
+                        <a class="nav-link" id="v-pills-profile-tab"  href="<%=DataUtils.PATH%>EditProfileSettings" role="tab"  aria-selected="false">Аккаунт</a>
                     </div>
 
                 </div>

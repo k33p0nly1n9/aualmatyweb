@@ -4,6 +4,7 @@
     Author     : bayan
 --%>
 
+<%@page import="models.Service"%>
 <%@page import="models.DataUtils"%>
 <%@page import="models.Order"%>
 <%@page import="java.util.ArrayList"%>
@@ -79,7 +80,7 @@
             </div>
 
 
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
 
                     <li class="page-item <%if (curPage == 1) {
@@ -121,7 +122,7 @@
                     <form method="post" action="NewResponse">
 
                         <div class="modal-header">
-                            <h5 class="modal-title" id="responseModalLabel">Опишите предложение</h5>
+                            <h5 class="modal-title" id="responseModalLabel">Опишите свой заказ</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -164,6 +165,13 @@
                     </form>
                 </div>
             </div>
+            
+            
+            <%
+             Service service = new Service(edTitle.getText().toString().trim(),
+                            Double.parseDouble(edPrice.getText().toString().trim()));
+                    services.add(service);
+            %>
         </div>
 
 

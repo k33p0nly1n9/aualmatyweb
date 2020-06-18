@@ -55,7 +55,7 @@ public class EditProfile extends HttpServlet {
             return;
         }
 
-        getServletContext().getRequestDispatcher("/WEB-INF/controllers/editProfile.jsp")
+        getServletContext().getRequestDispatcher("/WEB-INF/controllers/myprofile/editProfile.jsp")
                 .forward(request, response);
 
     }
@@ -100,25 +100,24 @@ public class EditProfile extends HttpServlet {
         }
 
         if (request.getParameterNames() != null) {
-
-            Person cur = Account.getCurrentPerson(request);
             if (request.getParameter("editName") != null) {
 
                 String name = request.getParameter("editName");
-                cur.setName(name);
+                person.setName(name);
 
             }
             if (request.getParameter("editLastname") != null) {
                 String lastname = request.getParameter("editLastname");
-                cur.setLastname(lastname);
+                person.setLastname(lastname);
             }
 
             if (request.getParameter("editBirthday") != null) {
                 Long b = DataUtils.convertDataToLongWithRawString(request.getParameter("editBirthday"));
-                cur.setBirthday(b);
+                person.setBirthday(b);
             }
             DbHelper db = new DbHelper();
-            db.updatePerson(cur);
+            db.updatePerson(person);
+                 request.setAttribute("settingssaved", "Изменения успешно сохранены");
 
         }
 

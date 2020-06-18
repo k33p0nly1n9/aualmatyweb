@@ -39,12 +39,6 @@ body{
 
 }
 
-h1,h2,h3,h4,h5,h6{
-
-    font-weight: 300;
-    color: #333;
-
-}
 
 p{
     line-height: 28px;
@@ -61,15 +55,8 @@ a{
     color: #f85c37;
 }
 
-a:hover, a:focus{
-    color: #7b7b7b;
-    text-decoration: none;
-    outline: 0;
-
-}
 
 hr{
-    display: block;
     height: 1px;
     border:0;
     border-top:1px solid #ccc;
@@ -91,3 +78,31 @@ hr{
     border-color:  #2d2d2d;
 }
 
+[type="file"] {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+ 
+[type="file"] + label {
+  background-color: #000;
+  border-radius: 4rem;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  padding-left: 2rem 4rem;
+}
+  
+[type="file"]:focus + label,
+[type="file"] + label:hover {
+    background-color: #f15d22;
+}
+  
+[type="file"]:focus + label {
+  outline: 1px dotted #000;
+}

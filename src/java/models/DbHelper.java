@@ -350,7 +350,7 @@ public class DbHelper {
             ResultSet rs = stmt.executeQuery(query);
 
             if (rs.first()) {
-                int v = rs.getInt(KEY_PERSON_ID);
+                int v = rs.getInt(1);
                 if (v == 1) {
                     b = true;
                 }
@@ -378,6 +378,24 @@ public class DbHelper {
             sqlEx.printStackTrace();
         }
         return rating;
+    }
+    
+    public String getPersonNumbById(int id){
+      String query = "select " + KEY_PERSON_NUMBER + " from " + TABLE_PERSON + " where " + KEY_PERSON_ID
+                       + " = " + id ;
+      try (Connection con = DriverManager.getConnection(URL, DBUSER, DBPASSWORD)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.first()) {
+               String numb = rs.getString(1);
+               return numb;
+            }
+        } catch (Exception sqlEx) {
+            sqlEx.printStackTrace();
+        }
+        return null;
     }
 
     public void updatePerson(Person person) {

@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers.person;
+package controllers.myprofile;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ import models.*;
  *
  * @author bayan
  */
-public class DeleteCurPersonPhoto extends HttpServlet {
+public class AddService extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,21 +32,12 @@ public class DeleteCurPersonPhoto extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+       ArrayList<Service> services  = (ArrayList<Service>) request.getAttribute("addservice");
+       String title = request.getParameter("newServiceTitle");
+      Double price  = Double.valueOf(request.getParameter("newServicePrice"));
+      
         
-        Person curPerson = models.Account.getCurrentPerson(request);
-
-        if (curPerson == null) {
-            response.sendRedirect("Login");
-            return;
-        }
-  
-        try {
-         DbHelper db = new DbHelper();
-         db.deletePersonPhoto(curPerson.getId());
-        } catch (Exception e) {
-          
-        } 
-        response.sendRedirect("EditProfile");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

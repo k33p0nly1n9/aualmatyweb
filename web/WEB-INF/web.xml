@@ -23,7 +23,7 @@
     <servlet>
         <servlet-name>Signup</servlet-name>
         <servlet-class>controllers.auth.Signup</servlet-class>
-           <multipart-config>
+        <multipart-config>
             <location>/tmp</location>
             <max-file-size>20848820</max-file-size>
             <max-request-size>418018841</max-request-size>
@@ -126,7 +126,23 @@
     </servlet>
     <servlet>
         <servlet-name>DeleteCurPersonPhoto</servlet-name>
-        <servlet-class>controllers.person.DeleteCurPersonPhoto</servlet-class>
+        <servlet-class>controllers.myprofile.DeleteCurPersonPhoto</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditProfileSettings</servlet-name>
+        <servlet-class>controllers.myprofile.EditProfileSettings</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MyForm</servlet-name>
+        <servlet-class>controllers.myprofile.MyForm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateForm</servlet-name>
+        <servlet-class>controllers.myprofile.CreateForm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddService</servlet-name>
+        <servlet-class>controllers.myprofile.AddService</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Profile</servlet-name>
@@ -243,6 +259,22 @@
     <servlet-mapping>
         <servlet-name>DeleteCurPersonPhoto</servlet-name>
         <url-pattern>/DeleteCurPersonPhoto</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProfileSettings</servlet-name>
+        <url-pattern>/EditProfileSettings</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MyForm</servlet-name>
+        <url-pattern>/MyForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateForm</servlet-name>
+        <url-pattern>/CreateForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddService</servlet-name>
+        <url-pattern>/AddService</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -3,19 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package controllers.myprofile;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import models.*;
 
 /**
  *
  * @author bayan
  */
-public class MyCabinet extends HttpServlet {
+public class DeleteCurPersonPhoto extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,17 +30,22 @@ public class MyCabinet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     
+        response.setContentType("text/html;charset=UTF-8");
         
-        Person person = Account.getCurrentPerson(request);
-      
-        if(person == null || person.getId() == 0){
-        response.sendRedirect("Login");
-        return;
+        Person curPerson = models.Account.getCurrentPerson(request);
+
+        if (curPerson == null) {
+            response.sendRedirect("Login");
+            return;
         }
-        //  request.setAttribute("per", person);
-        else{getServletContext().getRequestDispatcher("/WEB-INF/controllers/myprofile/myCabinet.jsp").forward(request, response);
-        }
+  
+        try {
+         DbHelper db = new DbHelper();
+         db.deletePersonPhoto(curPerson.getId());
+        } catch (Exception e) {
+          
+        } 
+        response.sendRedirect("EditProfile");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

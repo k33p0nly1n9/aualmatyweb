@@ -81,7 +81,7 @@ public class Signup extends HttpServlet {
         String numb = request.getParameter("number");
 
         if (!(passwd.equals(confirm))) {
-            request.setAttribute("signuperror", "Password mismatch");
+            request.setAttribute("signuperror", "Пароли не совпадают");
             getServletContext().getRequestDispatcher(SIGNUP_JSP)
                     .forward(request, response);
         }
